@@ -53,18 +53,28 @@ ns.WORDS.troll = {
     { phrases = { "hi", "hello" }, out = { "hey", "ey" } },
 }
 ns.WORDS.troll_thick = {
-    { phrases = { "i'm", "i am" }, out = "me be" },
+    { phrases = { "thank you so much", "thank you very much", "thanks so much", "thanks a lot", "many thanks" }, out = "tank ya plenty" },
+    { phrases = { "i'm going to", "i am going to", "i'm gonna" }, out = "me gonna" },
+    { phrases = { "i'm", "i am", "i was" }, out = "me be" },
     { phrases = { "i'll" }, out = { "me gonna", "me" } },
     { phrases = { "i've", "i" }, out = "me" },
     { phrases = { "my" }, out = "me" },
-    { phrases = { "you're", "you are" }, out = "ya be" },
+    { phrases = { "do you", "did you" }, out = "ya" },
+    { phrases = { "are you", "were you", "you're", "you are", "you were" }, out = "ya be" },
+    { phrases = { "was", "were" }, out = "be", after = "word" },
+    { phrases = { "should", "ought to" }, out = "oughta" },
+    { phrases = { "very" }, out = "real" },
+    { phrases = { "yes", "yeah" }, out = { "yah", "yah, mon" } },
     { phrases = { "before" }, out = "'fore" },
     { phrases = { "and" }, out = "an'" },
     { phrases = { "to" }, out = { "ta", "to" } },
+    { phrases = { "for" }, out = { "fa", "for" } },
+    { phrases = { "of" }, out = "o'" },
     { phrases = { "don't" }, out = "don'" },
-    { phrases = { "little" }, out = "lil'" },
-    { phrases = { "friend" }, out = "bruddah" },
-    { phrases = { "drink" }, out = "grog" },
+    { phrases = { "little", "small" }, out = "lil'" },
+    { phrases = { "friend", "brother" }, out = "bruddah" },
+    { phrases = { "sister" }, out = "sistah" },
+    { phrases = { "drink", "ale", "beer" }, out = "grog" },
 }
 ns.WORDS.dwarf = {
     { phrases = { "don't know" }, out = "dinnae ken" },
@@ -297,6 +307,7 @@ ns.STUTTER_CHANCE = 0.3
 
 ns.TAGS = { troll = { ", mon" }, dwarf = { ", lad" }, orc = {  } }
 ns.TAG_CHANCE = { troll = 0.55, dwarf = 0.45, orc = 0 }
+ns.TAG_CHANCE_THICK = { troll = 0.65, dwarf = 0.75, orc = 0 }
 ns.OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh." }, chance = 0.15 }, dwarf = { list = { "Och!", "Ach!", "Och aye!" }, chance = 0.2 }, orc = { list = { "Hrm." }, chance = 0.1 } }
 ns.THICK_OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh heh." }, chance = 0.35 }, dwarf = { list = { "Och!", "Ach!", "Crivvens!", "Och aye!" }, chance = 0.45 }, orc = { list = { "Hrm.", "Bah.", "Grah!", "Hrmph." }, chance = 0.4 } }
 
@@ -315,12 +326,11 @@ ns.TEST = {
 }
 
 ns.CLOSERS = {
-    TROLL_THANKS = { "Good juju.", "Da loa bless ya." },
-    TROLL_GLOOM = { "Bad mojo.", "Da spirits don' like it." },
-    TROLL_ANY = { "Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju." },
     DWARF_TAG = ", a charaid",
     DWARF_CHEERS = "Slàinte mhath!",
     DWARF_ANY = "Seadh.",
 }
 ns.ORC_CLOSERS = { fight = { "Lok'tar ogar!", "Gol'kosh!" }, any = { "Lok'tar!", "Zug zug." }, thanks = "Dabu." }
 ns.ORC_CLOSER_CHANCE = { light = 0.25, thick = 0.4 }
+ns.TROLL_CLOSERS = { thanks = { "Good juju.", "Da loa bless ya." }, fight = { "Da spirits be wit' us.", "Bwonsamdi be waitin' for dem." }, gloom = { "Bad mojo.", "Da spirits don' like it." }, any = { "Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju.", "Stay away from da voodoo." } }
+ns.TROLL_CLOSER_CHANCE = 0.45

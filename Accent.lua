@@ -349,13 +349,14 @@ local function Parts(accent, line, thick)
 
     local T, C = ns.TEST, ns.CLOSERS
     local tags = ns.TAGS[accent]
-    if #tags > 0 and not Has(p.core, T.TAGGED) and random() < ns.TAG_CHANCE[accent] + (thick and 0.3 or 0) then
+    if #tags > 0 and not Has(p.core, T.TAGGED)
+            and random() < (thick and ns.TAG_CHANCE_THICK or ns.TAG_CHANCE)[accent] then
         p.tagged = AddTag(p.core, Pick(tags))
     end
     local said = p.tagged or p.core
-    if accent == "troll" and thick and not Has(said, T.MOJO) then
-        p.closer = Pick(Has(said, T.THANKS) and C.TROLL_THANKS or Has(said, T.GLOOM) and C.TROLL_GLOOM
-                        or C.TROLL_ANY)
+    if accent == "troll" and thick and not Has(said, T.MOJO) and random() < ns.TROLL_CLOSER_CHANCE then
+        p.closer = Pick(ns.TROLL_CLOSERS[Has(said, T.THANKS) and "thanks" or Has(said, T.FIGHT) and "fight"
+                                         or Has(said, T.GLOOM) and "gloom" or "any"])
     elseif accent == "orc" and not Has(said, T.ORCISH)
             and random() < ns.ORC_CLOSER_CHANCE[thick and "thick" or "light"] then
         p.closer = Pick(ns.ORC_CLOSERS[Has(said, T.FIGHT) and "fight" or "any"])

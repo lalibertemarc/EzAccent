@@ -31,9 +31,6 @@ INLINE = {
     "DRINK": r"(?i:pint|drink|ale)",
     "DABU": r"(?i)dabu",
     "OPENED": r"(?i)(?:och|ach|ey|hey|ooh|hrm|bah|throm)",
-    "TROLL_THANKS": ["Good juju.", "Da loa bless ya."],
-    "TROLL_GLOOM": ["Bad mojo.", "Da spirits don' like it."],
-    "TROLL_ANY": ["Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju."],
     "DWARF_TAG": ", a charaid",
     "DWARF_CHEERS": "Slàinte mhath!",
     "DWARF_ANY": "Seadh.",
@@ -253,6 +250,7 @@ def main():
 
     out.append(f"ns.TAGS = {lua(rules.TAGS)}\n")
     out.append(f"ns.TAG_CHANCE = {lua(rules.TAG_CHANCE)}\n")
+    out.append(f"ns.TAG_CHANCE_THICK = {lua(rules.TAG_CHANCE_THICK)}\n")
     for name, src in (("OPENERS", rules.OPENERS), ("THICK_OPENERS", rules.THICK_OPENERS)):
         out.append(f"ns.{name} = {lua({k: {'list': v[0], 'chance': v[1]} for k, v in src.items()})}\n")
 
@@ -263,11 +261,12 @@ def main():
                  "DRINK": INLINE["DRINK"], "DABU": INLINE["DABU"], "OPENED": INLINE["OPENED"]}
     out.append("ns.TEST = {\n" + "".join(f"    {k} = {lua(detector(v))},\n" for k, v in detectors.items()) + "}\n\n")
 
-    closers = {k: INLINE[k] for k in ("TROLL_THANKS", "TROLL_GLOOM", "TROLL_ANY", "DWARF_TAG", "DWARF_CHEERS",
-                                      "DWARF_ANY")}
+    closers = {k: INLINE[k] for k in ("DWARF_TAG", "DWARF_CHEERS", "DWARF_ANY")}
     out.append("ns.CLOSERS = {\n" + "".join(f"    {k} = {lua(v)},\n" for k, v in closers.items()) + "}\n")
     out.append(f"ns.ORC_CLOSERS = {lua(rules.ORC_CLOSERS)}\n")
     out.append(f"ns.ORC_CLOSER_CHANCE = {lua(rules.ORC_CLOSER_CHANCE)}\n")
+    out.append(f"ns.TROLL_CLOSERS = {lua(rules.TROLL_CLOSERS)}\n")
+    out.append(f"ns.TROLL_CLOSER_CHANCE = {lua(rules.TROLL_CLOSER_CHANCE)}\n")
 
     path = ROOT / "Rules.lua"
     path.write_text("".join(out), encoding="utf-8", newline="\n")

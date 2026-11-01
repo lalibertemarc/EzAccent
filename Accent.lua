@@ -347,7 +347,7 @@ local function Parts(accent, line, thick)
     if accent == "troll" then line = TrollTh(line) end
     local p = { core = EndWithStop(Tidy(line)), tidy = true }
 
-    local T, C = ns.TEST, ns.CLOSERS
+    local T = ns.TEST
     local tags = ns.TAGS[accent]
     if #tags > 0 and not Has(p.core, T.TAGGED)
             and random() < (thick and ns.TAG_CHANCE_THICK or ns.TAG_CHANCE)[accent] then
@@ -362,11 +362,13 @@ local function Parts(accent, line, thick)
         p.closer = Pick(ns.ORC_CLOSERS[Has(said, T.FIGHT) and "fight" or "any"])
     elseif accent == "orc" and Has(said, T.THANKS) and not Has(said, T.DABU) and random() < 0.3 then
         p.closer = ns.ORC_CLOSERS.thanks
-    elseif accent == "dwarf" and thick and not Has(said, T.GAELIC) then  -- Gaelic in most lines
-        if random() < 0.5 then
-            p.tagged = AddTag((said:gsub(", lad", "")), C.DWARF_TAG)
+    elseif accent == "dwarf" and thick and not Has(said, T.GAELIC) and random() < ns.DWARF_CLOSER_CHANCE then
+        local C = ns.DWARF_CLOSERS
+        if random() < 0.4 then
+            p.tagged = AddTag((said:gsub(", lad", "")), C.tag)
         else
-            p.closer = (Has(said, T.THANKS) or Has(said, T.DRINK)) and C.DWARF_CHEERS or C.DWARF_ANY
+            p.closer = Pick(C[(Has(said, T.THANKS) or Has(said, T.DRINK)) and "thanks" or Has(said, T.FIGHT) and "fight"
+                              or Has(said, T.GLOOM) and "gloom" or "any"])
         end
     end
     local openers = (thick and ns.THICK_OPENERS or ns.OPENERS)[accent]

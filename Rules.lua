@@ -122,16 +122,42 @@ ns.WORDS.dwarf = {
     { phrases = { "great", "wonderful" }, out = "grand" },
     { phrases = { "lovely", "beautiful", "pretty" }, out = "bonny" },
     { phrases = { "yes" }, out = "aye" },
-    { phrases = { "hi", "hello" }, out = "hullo" },
+    { phrases = { "hello there", "hi there", "hi", "hello" }, out = "hullo" },
     { phrases = { "mother", "mom", "mum" }, out = "mam" },
+    { phrases = { "girl" }, out = "lass" },
+    { phrases = { "boy" }, out = "laddie" },
 }
 ns.WORDS.dwarf_thick = {
-    { phrases = { "thank you very much", "many thanks", "thank you", "thanks" }, out = { "tapadh leat", "mìle taing" } },
+    { phrases = { "thank you so much", "thank you very much", "thanks so much", "thanks a lot", "many thanks" }, out = "mìle taing" },
+    { phrases = { "thank you", "thanks" }, out = { "tapadh leat", "mìle taing" } },
     { phrases = { "my friend" }, out = "mo charaid" },
     { phrases = { "friend" }, out = "a charaid", after = "comma" },
     { phrases = { "my dear", "dear", "darling" }, out = "a ghràidh", after = "comma" },
-    { phrases = { "hello", "hi", "greetings" }, out = "ciamar a tha thu" },
+    { phrases = { "hello there", "hi there", "hello", "hi", "greetings" }, out = "ciamar a tha thu" },
     { phrases = { "goodbye", "farewell", "bye" }, out = "beannachd leat" },
+    { phrases = { "do you" }, out = "d'ye" },
+    { phrases = { "i'm", "i am" }, out = "Ah'm" },
+    { phrases = { "i'll" }, out = "Ah'll" },
+    { phrases = { "i've" }, out = "Ah've" },
+    { phrases = { "i'd" }, out = "Ah'd" },
+    { phrases = { "i" }, out = "Ah" },
+    { phrases = { "going to" }, out = "gonnae" },
+    { phrases = { "going" }, out = "gaun" },
+    { phrases = { "was", "were" }, out = "wis" },
+    { phrases = { "have" }, out = "hae" },
+    { phrases = { "where" }, out = "whaur" },
+    { phrases = { "everyone", "everybody" }, out = "a'body" },
+    { phrases = { "everything" }, out = "a'thing" },
+    { phrases = { "nothing" }, out = "naethin'" },
+    { phrases = { "right" }, out = "richt" },
+    { phrases = { "night" }, out = "nicht" },
+    { phrases = { "might" }, out = "micht" },
+    { phrases = { "light" }, out = "licht" },
+    { phrases = { "bright" }, out = "bricht" },
+    { phrases = { "cold" }, out = "cauld" },
+    { phrases = { "stone" }, out = "stane" },
+    { phrases = { "well" }, out = "weel" },
+    { phrases = { "idiot", "fool", "moron" }, out = { "eejit", "numpty" } },
     { phrases = { "cheers" }, out = "slàinte mhath" },
     { phrases = { "alas", "oh no" }, out = "mo chreach" },
     { phrases = { "whisky", "whiskey" }, out = "uisge beatha" },
@@ -307,14 +333,14 @@ ns.STUTTER_CHANCE = 0.3
 
 ns.TAGS = { troll = { ", mon" }, dwarf = { ", lad" }, orc = {  } }
 ns.TAG_CHANCE = { troll = 0.55, dwarf = 0.45, orc = 0 }
-ns.TAG_CHANCE_THICK = { troll = 0.65, dwarf = 0.75, orc = 0 }
+ns.TAG_CHANCE_THICK = { troll = 0.65, dwarf = 0.6, orc = 0 }
 ns.OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh." }, chance = 0.15 }, dwarf = { list = { "Och!", "Ach!", "Och aye!" }, chance = 0.2 }, orc = { list = { "Hrm." }, chance = 0.1 } }
-ns.THICK_OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh heh." }, chance = 0.35 }, dwarf = { list = { "Och!", "Ach!", "Crivvens!", "Och aye!" }, chance = 0.45 }, orc = { list = { "Hrm.", "Bah.", "Grah!", "Hrmph." }, chance = 0.4 } }
+ns.THICK_OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh heh." }, chance = 0.35 }, dwarf = { list = { "Och!", "Ach!", "Crivvens!", "Och aye!" }, chance = 0.3 }, orc = { list = { "Hrm.", "Bah.", "Grah!", "Hrmph." }, chance = 0.4 } }
 
 -- Tests on a line: words = whole words ("fad*" = starting with fad), subs = anywhere; both ignore case.
 ns.TEST = {
     THANKS = { words = { "thank", "thanks", "tank", "tanks", "aka'magosh", "dabu", "tapadh", "taing" } },
-    FIGHT = { words = { "fight", "fights", "battle", "war", "kill", "enemy", "enemies", "charge", "blood", "victory", "horde", "attack" } },
+    FIGHT = { words = { "fight", "fights", "battle", "war", "kill", "enemy", "enemies", "charge", "blood", "victory", "horde", "attack", "stramash" } },
     GLOOM = { words = { "no", "not", "nae", "ain't", "fad*", "bad", "die", "dead", "death", "regret", "without", "witout", "lost", "curse*", "alas" } },
     ORCISH = { subs = { "aka'magosh", "dabu", "throm-ka", "lok'", "zug zug", "swobu", "kagh", "gol'kosh" } },
     GAELIC = { subs = { "à", "è", "ì", "ò", "ù", "À", "È", "Ì", "Ò", "Ù", "a charaid", "seadh" } },
@@ -325,12 +351,9 @@ ns.TEST = {
     OPENED = { subs = { "och", "ach", "ey", "hey", "ooh", "hrm", "bah", "throm" } },
 }
 
-ns.CLOSERS = {
-    DWARF_TAG = ", a charaid",
-    DWARF_CHEERS = "Slàinte mhath!",
-    DWARF_ANY = "Seadh.",
-}
 ns.ORC_CLOSERS = { fight = { "Lok'tar ogar!", "Gol'kosh!" }, any = { "Lok'tar!", "Zug zug." }, thanks = "Dabu." }
 ns.ORC_CLOSER_CHANCE = { light = 0.25, thick = 0.4 }
 ns.TROLL_CLOSERS = { thanks = { "Good juju.", "Da loa bless ya." }, fight = { "Da spirits be wit' us.", "Bwonsamdi be waitin' for dem." }, gloom = { "Bad mojo.", "Da spirits don' like it." }, any = { "Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju.", "Stay away from da voodoo." } }
 ns.TROLL_CLOSER_CHANCE = 0.45
+ns.DWARF_CLOSERS = { tag = ", a charaid", thanks = { "Slàinte mhath!" }, fight = { "By my beard!", "Seadh!" }, gloom = { "Mo chreach." }, any = { "Seadh.", "So it is." } }
+ns.DWARF_CLOSER_CHANCE = 0.5

@@ -1,0 +1,13 @@
+## Interface: 16001, 11509
+## Title: EzAccent
+## Notes: Type a line and your character says it in their accent: orc, troll, dwarf or undead.
+## Author: Marc
+## Version: @project-version@
+## IconTexture: Interface\Icons\Spell_Holy_Silence
+## SavedVariables: EzAccentDB
+## SavedVariablesPerCharacter: EzAccentCharDB
+
+Data.lua
+Rules.lua
+Accent.lua
+Core.lua

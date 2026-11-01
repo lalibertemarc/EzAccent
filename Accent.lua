@@ -1,0 +1,391 @@
+-- EzAccent's accent engine: a hand port of AccentTranslator's rules.py (accented() and its helpers) to Lua 5.1,
+-- which has no regex, so phrases are matched by hand. The tables come from Rules.lua (tools/gen_rules.py).
+--   ns.Speak(accent, line, thick) -> the line in that accent ("none" leaves it alone)
+--   ns.Split(text, max)           -> text cut at spaces into chat messages of at most max bytes
+-- Chat links (|H...|h...|h and other | escapes), {skull}-style tokens and %t are never touched.
+local _, ns = ...
+
+local random = math.random
+local concat = table.concat
+
+local function Pick(list)
+    return list[random(#list)]
+end
+
+local function Trim(s)
+    return (s:match("^%s*(.-)%s*$"))
+end
+
+local function Escape(s)
+    return (s:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
+end
+
+---------------------------------------------------------------------------
+-- Protected tokens: swapped for {1}, {2}... while the accent works (rules.py already leaves {words} alone), put
+-- back at the end.
+---------------------------------------------------------------------------
+local ESCAPES = { "^|c[^|]*|H.-|h.-|h|r", "^|H.-|h.-|h", "^|T.-|t", "^|A.-|a", "^|K.-|k", "^|c%x%x%x%x%x%x%x%x",
+                  "^|r" }
+
+local function Protect(line)
+    local saved, out, i = {}, {}, 1
+    while i <= #line do
+        local c, s, e = line:sub(i, i)
+        if c == "|" then
+            for _, p in ipairs(ESCAPES) do
+                s, e = line:find(p, i)
+                if s then break end
+            end
+        elseif c == "{" then
+            s, e = line:find("^{[^{}]*}", i)
+        elseif c == "%" then
+            s, e = line:find("^%%%a", i)
+        end
+        if s then
+            saved[#saved + 1] = line:sub(s, e)
+            out[#out + 1] = "{" .. #saved .. "}"
+            i = e + 1
+        else
+            out[#out + 1] = c
+            i = i + 1
+        end
+    end
+    return concat(out), saved
+end
+
+local function Restore(line, saved)
+    return (line:gsub("{(%d+)}", function(n) return saved[tonumber(n)] end))
+end
+
+---------------------------------------------------------------------------
+-- Word swaps (rules.word_rx / swap_words / case_like)
+---------------------------------------------------------------------------
+-- c is part of a word: \w, an apostrophe, or the given brace (rules.py's [\w'{] before and [\w'}] after).
+local function Inside(c, brace)
+    return c ~= "" and (c:find("[%w_']") ~= nil or c == brace)
+end
+
+-- The lookbehinds gen_rules.py turns into rule.after.
+local function AfterOK(line, i, after)
+    if after == "word" then
+        return line:sub(i - 1, i - 1) == " " and line:sub(i - 2, i - 2):find("[%w_}']") ~= nil
+    elseif after == "comma" then
+        return line:sub(i - 2, i - 1) == ", "
+    end
+    return true
+end
+
+-- A capital on the original's first letter carries over, except on "I"; a shouted word stays shouted.
+local function CaseLike(src, out)
+    if out == "" or not src:find("^%u") or src == "I" or src:find("^I'") then return out end
+    if #src > 2 and src:upper() == src then return out:upper() end
+    return out:sub(1, 1):upper() .. out:sub(2)
+end
+
+-- At each word start the first rule (and phrase) that matches wins, like one big regex alternation.
+local function SwapWords(line, rules)
+    local low, out, i, n = line:lower(), {}, 1, #line
+    while i <= n do
+        local rule, e
+        if not Inside(line:sub(i - 1, i - 1), "{") then
+            for _, r in ipairs(rules) do
+                if AfterOK(line, i, r.after) then
+                    for _, p in ipairs(r.phrases) do
+                        local last = i + #p - 1
+                        if low:sub(i, last) == p and not Inside(line:sub(last + 1, last + 1), "}") then
+                            rule, e = r, last
+                            break
+                        end
+                    end
+                end
+                if rule then break end
+            end
+        end
+        if rule then
+            local src = line:sub(i, e)
+            if random() > (rule.chance or 1) then
+                out[#out + 1] = src
+            else
+                out[#out + 1] = CaseLike(src, type(rule.out) == "table" and Pick(rule.out) or rule.out)
+            end
+            i = e + 1
+        else
+            out[#out + 1] = line:sub(i, i)
+            i = i + 1
+        end
+    end
+    return concat(out)
+end
+
+local rulesCache = {}
+local function Rules(accent, thick)
+    local key = accent .. (thick and "_thick" or "")
+    if not rulesCache[key] then
+        local list = {}
+        local function add(t) for _, r in ipairs(t) do list[#list + 1] = r end end
+        -- Orc's "is fading" -> "fades" goes ahead of thick's dropped "is".
+        if accent == "orc" then add(ns.WORDS.orc_pre) end
+        if thick then add(ns.WORDS[accent .. "_thick"]) end
+        add(ns.WORDS[accent])
+        rulesCache[key] = list
+    end
+    return rulesCache[key]
+end
+
+---------------------------------------------------------------------------
+-- The rest of rules.py's helpers
+---------------------------------------------------------------------------
+-- walking -> walkin', blessings -> blessin's; thing, king, bring keep theirs (no vowel before the -ing), and so
+-- does Gaelic taing.
+local function DropGs(line)
+    return (line:gsub("()([%w_']+)()", function(s, word, e)
+        if line:sub(s - 1, s - 1) == "{" or line:sub(e, e) == "}" or not word:find("^%a+$") then return end
+        local stem, plural = word:match("^(%a-)ing(s?)$")
+        if not stem or stem == "" or not stem:find("[aeiouyAEIOUY]") or word:lower() == "taing" then return end
+        return stem .. "in'" .. plural
+    end))
+end
+
+-- Lower-case words starting in th (think, three, thick) lose the h; Thrall keeps his.
+local function TrollTh(line)
+    return (line:gsub("%f[%w_'{]th(%l)", "t%1"))
+end
+
+-- gsub until nothing changes: stands in for a repeated group, (?:...)+
+local function Repeat(line, pattern, repl)
+    local n
+    repeat line, n = line:gsub(pattern, repl) until n == 0
+    return line
+end
+
+local function Upper(prefix, c) return prefix .. c:upper() end
+
+local function Tidy(line)
+    line = line:gsub("%s+", " ")
+    line = line:gsub("%s+([,.!?;:])", "%1")
+    line = line:gsub("^[%s,.;:]+", "")
+    line = Repeat(line, "([.!?])%s*[,.;:]", "%1")  -- also covers rules.py's lone ".." rule
+    line = Repeat(line, ",%s*,", ",")
+    line = line:gsub("[,;:]%s*([.!?])", "%1")
+    line = line:gsub("^(['\"]?)(%l)", Upper)
+    line = line:gsub("([.!?]%s+['\"]?)(%l)", Upper)
+    return Trim(line)
+end
+
+local function EndWithStop(line)
+    return line:find("[.!?]['\"]?$") and line or line .. "."
+end
+
+-- tag (", mon") before the closing mark of one sentence, the last more often than not.
+local function AddTag(line, tag)
+    local ends = {}
+    for s, e in line:gmatch("()[.!?]+()") do
+        local after = line:sub(e, e)
+        if after == "" or after:find("%s") then ends[#ends + 1] = s end
+    end
+    if #ends == 0 then return (line:gsub("[,;: ]+$", "")) .. tag end
+    local s = random() < 0.6 and ends[#ends] or ends[random(#ends)]
+    return line:sub(1, s - 1) .. tag .. line:sub(s)
+end
+
+-- 'Would you cast X on me?' -> 'cast X on me.': orcs don't ask.
+local MODALS = { "would", "could", "can", "will" }
+local function OrcRequests(line)
+    local low, out, pos = line:lower(), {}, 1
+    while true do
+        local at, youEnd
+        for _, m in ipairs(MODALS) do
+            local s, e = low:find("%f[%w_]" .. m .. " you", pos)
+            if s and (not at or s < at) then at, youEnd = s, e end
+        end
+        if not at then break end
+        local s, e, c1, c2 = low:find("^ please%s+()[^.!?]*()%?", youEnd + 1)
+        if not s then s, e, c1, c2 = low:find("^%s+()[^.!?]*()%?", youEnd + 1) end
+        if s then
+            out[#out + 1] = line:sub(pos, at - 1) .. line:sub(c1, c2 - 1) .. "."
+            pos = e + 1
+        else
+            out[#out + 1] = line:sub(pos, at)
+            pos = at + 1
+        end
+    end
+    out[#out + 1] = line:sub(pos)
+    return concat(out)
+end
+
+-- One of rules.py's test regexes (ns.TEST, from gen_rules.py) on a line.
+local function Has(line, test)
+    local low = line:lower()
+    for _, w in ipairs(test.words or {}) do
+        local stem = w:match("^(.-)%*$")
+        if low:find("%f[%w_]" .. Escape(stem or w) .. (stem and "" or "%f[^%w_]")) then return true end
+    end
+    for _, s in ipairs(test.subs or {}) do
+        if low:find(s, 1, true) then return true end
+    end
+    return false
+end
+
+local function StartsWithAny(line, list)
+    local low = line:lower()
+    for _, s in ipairs(list) do
+        if low:sub(1, #s) == s then return true end
+    end
+    return false
+end
+
+---------------------------------------------------------------------------
+-- Undead (rules.respell): spelling swaps, then a strained sound at the end
+---------------------------------------------------------------------------
+local function AheadOK(c, ahead)
+    if not ahead then return true end
+    if ahead == "boundary" then return c == "" or not c:find("[%w_]") end
+    return c ~= "" and ahead:find(c, 1, true) ~= nil
+end
+
+local function Respell(line, swaps)
+    local low, out, i, n = line:lower(), {}, 1, #line
+    while i <= n do
+        local hit
+        for _, sw in ipairs(swaps) do
+            local e = i + #sw.from - 1
+            if low:sub(i, e) == sw.from and AheadOK(low:sub(e + 1, e + 1), sw.ahead) then
+                hit = sw
+                break
+            end
+        end
+        if hit then
+            local to = hit.to
+            if line:find("^%u", i) then
+                local k = to:sub(1, 1) == "'" and 2 or 1
+                to = to:sub(1, k - 1) .. to:sub(k, k):upper() .. to:sub(k + 1)
+            end
+            out[#out + 1] = to
+            i = i + #hit.from
+        else
+            out[#out + 1] = line:sub(i, i)
+            i = i + 1
+        end
+    end
+    return concat(out)
+end
+
+-- rules.SOUND_AT_END, by hand: a line already ending in a gurgle or strain gets no second one.
+local SOUNDS = { "^gh+k+$", "^hh+r*k+$", "^hhh+$", "^n+gh$", "^m+f$", "^hk+$", "^nnn+$", "^sss+$" }
+local function IsSound(word)
+    if not word then return false end
+    for _, p in ipairs(SOUNDS) do
+        if word:find(p) then return true end
+    end
+    return false
+end
+
+local function EndsInSound(line)
+    local last = line:lower():gsub("[^%w_]*$", ""):match("([%w_]+%-?[%w_]*)$")
+    if not last then return false end
+    local head, tail = last:match("^([%w_]+)%-([%w_]+)$")
+    if head then return IsSound(head) or IsSound(tail) end
+    return IsSound(last)
+end
+
+-- The odd s hisses through the teeth: jusst, thiss.
+local function Hiss(line)
+    local words = {}
+    for s, w, e in line:gmatch("()([%w_]+)()") do
+        if line:sub(s - 1, s - 1) ~= "{" and line:sub(e, e) ~= "}" and w:find("s", 2, true) then
+            words[#words + 1] = { s, e, w }
+        end
+    end
+    if #words == 0 then return line end
+    local pick = Pick(words)
+    local w = pick[3]
+    local at = w:match("^.*()s")
+    return line:sub(1, pick[1] - 1) .. w:sub(1, at) .. w:sub(at) .. line:sub(pick[2])
+end
+
+---------------------------------------------------------------------------
+-- rules.accented, split in two so the extras (tag, closer, opener) can be dropped to fit the chat limit:
+-- Parts() returns { core, tagged?, closer?, opener?, tidy }.
+---------------------------------------------------------------------------
+local function Parts(accent, line, thick)
+    if accent == "undead" then
+        if not thick and random() < 0.5 then line = Hiss(line) end
+        line = Respell(line, thick and ns.JAWLESS or ns.LOCKED)
+        return { core = line, closer = not EndsInSound(line) and Pick(thick and ns.GURGLES or ns.STRAINS) or nil }
+    end
+
+    if accent == "orc" then
+        line = OrcRequests(line)
+        if thick then line = line:gsub(",%s*", ". ") end
+    end
+    line = SwapWords(line, Rules(accent, thick))
+    if accent == "troll" or accent == "dwarf" then line = DropGs(line) end
+    if accent == "troll" then line = TrollTh(line) end
+    local p = { core = EndWithStop(Tidy(line)), tidy = true }
+
+    local T, C = ns.TEST, ns.CLOSERS
+    local tags = ns.TAGS[accent]
+    if #tags > 0 and not Has(p.core, T.TAGGED) and random() < ns.TAG_CHANCE[accent] + (thick and 0.3 or 0) then
+        p.tagged = AddTag(p.core, Pick(tags))
+    end
+    local said = p.tagged or p.core
+    if accent == "troll" and thick and not Has(said, T.MOJO) then
+        p.closer = Pick(Has(said, T.THANKS) and C.TROLL_THANKS or Has(said, T.GLOOM) and C.TROLL_GLOOM
+                        or C.TROLL_ANY)
+    elseif accent == "orc" and not Has(said, T.ORCISH) and random() < (thick and 1 or 0.3) then
+        p.closer = Has(said, T.FIGHT) and C.ORC_FIGHT or Pick(C.ORC_ANY)
+    elseif accent == "orc" and Has(said, T.THANKS) and not Has(said, T.DABU) and random() < 0.3 then
+        p.closer = C.ORC_THANKS
+    elseif accent == "dwarf" and thick and not Has(said, T.GAELIC) then  -- Gaelic in most lines
+        if random() < 0.5 then
+            p.tagged = AddTag((said:gsub(", lad", "")), C.DWARF_TAG)
+        else
+            p.closer = (Has(said, T.THANKS) or Has(said, T.DRINK)) and C.DWARF_CHEERS or C.DWARF_ANY
+        end
+    end
+    local openers = (thick and ns.THICK_OPENERS or ns.OPENERS)[accent]
+    if random() < openers.chance and not StartsWithAny(said, T.OPENED.subs) then
+        p.opener = Pick(openers.list)
+    end
+    return p
+end
+
+-- drop: 0 keeps every extra, 1 drops the opener, 2 the closer too, 3 the tag too.
+local function Build(p, drop)
+    local line = drop < 3 and p.tagged or p.core
+    if drop < 2 and p.closer then line = line .. " " .. p.closer end
+    if drop < 1 and p.opener then line = p.opener .. " " .. line end
+    return p.tidy and Tidy(line) or line
+end
+
+function ns.Speak(accent, line, thick, max)
+    if not accent or accent == "none" or not ns.WORDS then return line end
+    if accent ~= "undead" and not ns.WORDS[accent] then return line end
+    local text, saved = Protect(line)
+    local p = Parts(accent, text, thick)
+    local out
+    for drop = 0, 3 do
+        out = Restore(Build(p, drop), saved)
+        if not max or #out <= max then break end
+    end
+    return out
+end
+
+-- Cut at spaces (never inside a link) into messages of at most max bytes; a single longer word goes alone.
+function ns.Split(text, max)
+    local text2, saved = Protect(text)
+    local out, cur = {}, ""
+    for word in text2:gmatch("%S+") do
+        word = Restore(word, saved)
+        if cur == "" then
+            cur = word
+        elseif #cur + 1 + #word <= max then
+            cur = cur .. " " .. word
+        else
+            out[#out + 1] = cur
+            cur = word
+        end
+    end
+    if cur ~= "" then out[#out + 1] = cur end
+    return out
+end

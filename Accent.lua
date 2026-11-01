@@ -356,10 +356,11 @@ local function Parts(accent, line, thick)
     if accent == "troll" and thick and not Has(said, T.MOJO) then
         p.closer = Pick(Has(said, T.THANKS) and C.TROLL_THANKS or Has(said, T.GLOOM) and C.TROLL_GLOOM
                         or C.TROLL_ANY)
-    elseif accent == "orc" and not Has(said, T.ORCISH) and random() < (thick and 1 or 0.3) then
-        p.closer = Has(said, T.FIGHT) and C.ORC_FIGHT or Pick(C.ORC_ANY)
+    elseif accent == "orc" and not Has(said, T.ORCISH)
+            and random() < ns.ORC_CLOSER_CHANCE[thick and "thick" or "light"] then
+        p.closer = Pick(ns.ORC_CLOSERS[Has(said, T.FIGHT) and "fight" or "any"])
     elseif accent == "orc" and Has(said, T.THANKS) and not Has(said, T.DABU) and random() < 0.3 then
-        p.closer = C.ORC_THANKS
+        p.closer = ns.ORC_CLOSERS.thanks
     elseif accent == "dwarf" and thick and not Has(said, T.GAELIC) then  -- Gaelic in most lines
         if random() < 0.5 then
             p.tagged = AddTag((said:gsub(", lad", "")), C.DWARF_TAG)

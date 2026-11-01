@@ -26,9 +26,6 @@ AFTER = {r"(?<=[\w}'] )": "word", r"(?<=, )": "comma"}
 
 # Copied from rules.accented(); each string must still appear in its source.
 INLINE = {
-    "ORC_PRE": [(r"I'm not going to", "I will not"), (r"(?:is|are|am) not going to", "will not"),
-                (r"(?:is|are|am) going to", "will")],
-    "ORC_VERB_RULE": "(?:is|are) {v}",
     "TAGGED": r"(?i)\b(?:mon|lad|charaid)\b",
     "MOJO": r"(?i)loa|juju|mojo|spirits|bwonsamdi|voodoo",
     "DRINK": r"(?i:pint|drink|ale)",
@@ -37,9 +34,6 @@ INLINE = {
     "TROLL_THANKS": ["Good juju.", "Da loa bless ya."],
     "TROLL_GLOOM": ["Bad mojo.", "Da spirits don' like it."],
     "TROLL_ANY": ["Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju."],
-    "ORC_FIGHT": "Lok'tar ogar!",
-    "ORC_ANY": ["Zug zug.", "Lok'tar!"],
-    "ORC_THANKS": "Dabu.",
     "DWARF_TAG": ", a charaid",
     "DWARF_CHEERS": "Slàinte mhath!",
     "DWARF_ANY": "Seadh.",
@@ -234,11 +228,10 @@ def main():
            "-- or \"comma\" (\", \" before) }. Phrases are lowercase and matched as whole words, first rule wins.\n",
            "local _, ns = ...\n\n"]
 
-    orc_pre = INLINE["ORC_PRE"] + [(INLINE["ORC_VERB_RULE"].format(v=v), s) for v, s in rules.ORC_VERBS.items()]
     tables = {
         "troll": rules.TROLL, "troll_thick": rules.TROLL_THICK,
         "dwarf": rules.DWARF, "dwarf_thick": rules.DWARF_THICK,
-        "orc": rules.ORC, "orc_thick": rules.ORC_THICK, "orc_pre": orc_pre,
+        "orc": rules.ORC, "orc_thick": rules.ORC_THICK, "orc_pre": rules.ORC_PRE,
     }
     out.append("ns.WORDS = {}\n")
     for key, rule_list in tables.items():
@@ -270,9 +263,11 @@ def main():
                  "DRINK": INLINE["DRINK"], "DABU": INLINE["DABU"], "OPENED": INLINE["OPENED"]}
     out.append("ns.TEST = {\n" + "".join(f"    {k} = {lua(detector(v))},\n" for k, v in detectors.items()) + "}\n\n")
 
-    closers = {k: INLINE[k] for k in ("TROLL_THANKS", "TROLL_GLOOM", "TROLL_ANY", "ORC_FIGHT", "ORC_ANY",
-                                      "ORC_THANKS", "DWARF_TAG", "DWARF_CHEERS", "DWARF_ANY")}
+    closers = {k: INLINE[k] for k in ("TROLL_THANKS", "TROLL_GLOOM", "TROLL_ANY", "DWARF_TAG", "DWARF_CHEERS",
+                                      "DWARF_ANY")}
     out.append("ns.CLOSERS = {\n" + "".join(f"    {k} = {lua(v)},\n" for k, v in closers.items()) + "}\n")
+    out.append(f"ns.ORC_CLOSERS = {lua(rules.ORC_CLOSERS)}\n")
+    out.append(f"ns.ORC_CLOSER_CHANCE = {lua(rules.ORC_CLOSER_CHANCE)}\n")
 
     path = ROOT / "Rules.lua"
     path.write_text("".join(out), encoding="utf-8", newline="\n")

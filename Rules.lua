@@ -227,6 +227,15 @@ ns.LOCKED = {
     { from = "o", to = "u" },
 }
 ns.JAWLESS = {
+    { from = "th", to = "hh" },
+    { from = "sh", to = "sh" },
+    { from = "ch", to = "sh" },
+    { from = "ss", to = "sh" },
+    { from = "s", to = "sh" },
+    { from = "z", to = "sh" },
+    { from = "c", to = "sh", ahead = "eiy" },
+    { from = "j", to = "y" },
+    { from = "x", to = "kh" },
     { from = "ph", to = "hh" },
     { from = "wh", to = "'h" },
     { from = "wr", to = "r" },
@@ -244,6 +253,9 @@ ns.JAWLESS = {
 }
 ns.STRAINS = { "Nngh.", "Mmf.", "Hkk.", "Nnn.", "Hkk-hkk." }
 ns.GURGLES = { "Ghhk.", "Hhrrk.", "Hhhh.", "Ghhk-hk.", "Hhkk." }
+-- Jawless only: sometimes one of these mid-line, at a comma or between sentences.
+ns.DROOLS = { "ghk", "shlrk", "hlk", "hhk", "glrk" }
+ns.DROOL_CHANCE = 0.4
 
 ns.TAGS = { troll = { ", mon" }, dwarf = { ", lad" }, orc = {  } }
 ns.TAG_CHANCE = { troll = 0.55, dwarf = 0.45, orc = 0 }

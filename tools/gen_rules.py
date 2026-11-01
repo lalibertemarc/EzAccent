@@ -4,7 +4,7 @@ with the Python ones. Rerun after editing rules.py:
     python tools/gen_rules.py
 
 What it ports: the word swap tables (TROLL/DWARF/ORC + *_THICK, ORC_VERBS), the undead spelling rules (LOCKED,
-JAWLESS) and their end sounds, tags, openers, and the regexes that pick closers. Lua 5.1 has no regex, so every
+JAWLESS), their end sounds and the jawless drools, tags, openers, and the regexes that pick closers. Lua 5.1 has no regex, so every
 pattern is expanded into plain phrases ("(?:is|are) going to" -> "is going to", "are going to"); anything this
 script doesn't understand stops it with an error instead of porting it wrong.
 
@@ -227,7 +227,10 @@ def main():
     out.append(lua_list("ns.LOCKED", [spell_rule(r) for r in rules.LOCKED]))
     out.append(lua_list("ns.JAWLESS", [spell_rule(r) for r in rules.JAWLESS]))
     out.append(f"ns.STRAINS = {lua(rules.STRAINS)}\n")
-    out.append(f"ns.GURGLES = {lua(rules.GURGLES)}\n\n")
+    out.append(f"ns.GURGLES = {lua(rules.GURGLES)}\n")
+    out.append("-- Jawless only: sometimes one of these mid-line, at a comma or between sentences.\n")
+    out.append(f"ns.DROOLS = {lua(rules.DROOLS)}\n")
+    out.append(f"ns.DROOL_CHANCE = {lua(rules.DROOL_CHANCE)}\n\n")
 
     out.append(f"ns.TAGS = {lua(rules.TAGS)}\n")
     out.append(f"ns.TAG_CHANCE = {lua(rules.TAG_CHANCE)}\n")

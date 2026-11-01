@@ -288,6 +288,18 @@ local function EndsInSound(line)
     return IsSound(last)
 end
 
+-- rules.drool: one wet sound at a comma (", ghk, ") or between two sentences (". Ghk. ").
+local function Drool(line)
+    local breaks = {}
+    for s, mark, e in line:gmatch("()([,.!?]+)%s+()") do
+        if e <= #line then breaks[#breaks + 1] = { s, mark, e } end
+    end
+    if #breaks == 0 then return line end
+    local b, d = Pick(breaks), Pick(ns.DROOLS)
+    local ins = b[2] == "," and ", " .. d .. ", " or b[2] .. " " .. d:sub(1, 1):upper() .. d:sub(2) .. ". "
+    return line:sub(1, b[1] - 1) .. ins .. line:sub(b[3])
+end
+
 -- The odd s hisses through the teeth: jusst, thiss.
 local function Hiss(line)
     local words = {}
@@ -311,6 +323,7 @@ local function Parts(accent, line, thick)
     if accent == "undead" then
         if not thick and random() < 0.5 then line = Hiss(line) end
         line = Respell(line, thick and ns.JAWLESS or ns.LOCKED)
+        if thick and random() < ns.DROOL_CHANCE then line = Drool(line) end
         return { core = line, closer = not EndsInSound(line) and Pick(thick and ns.GURGLES or ns.STRAINS) or nil }
     end
 

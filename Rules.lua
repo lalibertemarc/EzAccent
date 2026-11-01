@@ -220,8 +220,10 @@ ns.WORDS.orc_pre = {
     { phrases = { "is leaving", "are leaving" }, out = "leaves" },
 }
 
--- Undead spelling swaps, in order: { from, to, ahead? = "boundary" or letters one of which must follow }.
+-- Undead spelling swaps, in order: { from, to, ahead? = a Lua pattern that must match right after }.
 ns.LOCKED = {
+    { from = "igh", to = "ey" },
+    { from = "i", to = "ey", ahead = "[bcdfgklmnprstz]e%f[^%w_]" },
     { from = "ou", to = "uu" },
     { from = "a", to = "e" },
     { from = "o", to = "u" },
@@ -233,13 +235,13 @@ ns.JAWLESS = {
     { from = "ss", to = "sh" },
     { from = "s", to = "sh" },
     { from = "z", to = "sh" },
-    { from = "c", to = "sh", ahead = "eiy" },
+    { from = "c", to = "sh", ahead = "[eiy]" },
     { from = "j", to = "y" },
     { from = "x", to = "kh" },
     { from = "ph", to = "hh" },
     { from = "wh", to = "'h" },
     { from = "wr", to = "r" },
-    { from = "mb", to = "ng", ahead = "boundary" },
+    { from = "mb", to = "ng", ahead = "%f[^%w_]" },
     { from = "mm", to = "ng" },
     { from = "bb", to = "gh" },
     { from = "pp", to = "hh" },
@@ -249,13 +251,17 @@ ns.JAWLESS = {
     { from = "f", to = "hh" },
     { from = "v", to = "h" },
     { from = "m", to = "ng" },
-    { from = "w", to = "'", ahead = "aeiouy" },
+    { from = "w", to = "'", ahead = "[aeiouy]" },
 }
 ns.STRAINS = { "Nngh.", "Mmf.", "Hkk.", "Nnn.", "Hkk-hkk." }
 ns.GURGLES = { "Ghhk.", "Hhrrk.", "Hhhh.", "Ghhk-hk.", "Hhkk." }
 -- Jawless only: sometimes one of these mid-line, at a comma or between sentences.
 ns.DROOLS = { "ghk", "shlrk", "hlk", "hhk", "glrk" }
 ns.DROOL_CHANCE = 0.4
+-- Locked jaw only: the same mid-line, and how often a word's first sound catches (w-would).
+ns.CLENCHES = { "nngh", "mmf", "hkk", "tss" }
+ns.CLENCH_CHANCE = 0.35
+ns.STUTTER_CHANCE = 0.3
 
 ns.TAGS = { troll = { ", mon" }, dwarf = { ", lad" }, orc = {  } }
 ns.TAG_CHANCE = { troll = 0.55, dwarf = 0.45, orc = 0 }

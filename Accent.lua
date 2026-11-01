@@ -237,19 +237,13 @@ end
 ---------------------------------------------------------------------------
 -- Undead (rules.respell): spelling swaps, then a strained sound at the end
 ---------------------------------------------------------------------------
-local function AheadOK(c, ahead)
-    if not ahead then return true end
-    if ahead == "boundary" then return c == "" or not c:find("[%w_]") end
-    return c ~= "" and ahead:find(c, 1, true) ~= nil
-end
-
 local function Respell(line, swaps)
     local low, out, i, n = line:lower(), {}, 1, #line
     while i <= n do
         local hit
         for _, sw in ipairs(swaps) do
             local e = i + #sw.from - 1
-            if low:sub(i, e) == sw.from and AheadOK(low:sub(e + 1, e + 1), sw.ahead) then
+            if low:sub(i, e) == sw.from and (not sw.ahead or low:find("^" .. sw.ahead, e + 1)) then
                 hit = sw
                 break
             end
@@ -288,16 +282,30 @@ local function EndsInSound(line)
     return IsSound(last)
 end
 
--- rules.drool: one wet sound at a comma (", ghk, ") or between two sentences (". Ghk. ").
-local function Drool(line)
+-- rules.drool: one of sounds at a comma (", ghk, ") or between two sentences (". Ghk. ").
+local function Drool(line, sounds)
     local breaks = {}
     for s, mark, e in line:gmatch("()([,.!?]+)%s+()") do
         if e <= #line then breaks[#breaks + 1] = { s, mark, e } end
     end
     if #breaks == 0 then return line end
-    local b, d = Pick(breaks), Pick(ns.DROOLS)
+    local b, d = Pick(breaks), Pick(sounds)
     local ins = b[2] == "," and ", " .. d .. ", " or b[2] .. " " .. d:sub(1, 1):upper() .. d:sub(2) .. ". "
     return line:sub(1, b[1] - 1) .. ins .. line:sub(b[3])
+end
+
+-- rules.stutter: one word of three letters or more starting with a consonant, its first letter caught: w-would.
+local function Stutter(line)
+    local words = {}
+    for s, w in line:gmatch("()([%w_]+)") do
+        if line:sub(s - 1, s - 1) ~= "{" and line:sub(s - 1, s - 1) ~= "'" and #w >= 3
+                and w:find("^[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z]") then
+            words[#words + 1] = { s, w }
+        end
+    end
+    if #words == 0 then return line end
+    local s, w = unpack(Pick(words))
+    return line:sub(1, s - 1) .. w:sub(1, 1) .. "-" .. w:sub(1, 1):lower() .. line:sub(s + 1)
 end
 
 -- The odd s hisses through the teeth: jusst, thiss.
@@ -322,8 +330,11 @@ end
 local function Parts(accent, line, thick)
     if accent == "undead" then
         if not thick and random() < 0.5 then line = Hiss(line) end
+        if not thick and random() < ns.STUTTER_CHANCE then line = Stutter(line) end
         line = Respell(line, thick and ns.JAWLESS or ns.LOCKED)
-        if thick and random() < ns.DROOL_CHANCE then line = Drool(line) end
+        if random() < (thick and ns.DROOL_CHANCE or ns.CLENCH_CHANCE) then
+            line = Drool(line, thick and ns.DROOLS or ns.CLENCHES)
+        end
         return { core = line, closer = not EndsInSound(line) and Pick(thick and ns.GURGLES or ns.STRAINS) or nil }
     end
 

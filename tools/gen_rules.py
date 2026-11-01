@@ -128,17 +128,39 @@ def word_rule(rule):
     return entry
 
 
+def lua_ahead(rx, pattern):
+    """A lookahead's letters, [classes] and a final \\b -> the Lua pattern Accent.lua anchors after the match."""
+    out, i = "", 0
+    while i < len(rx):
+        if rx.startswith(r"\b", i) and i + 2 == len(rx):
+            out += "%f[^%w_]"
+            i += 2
+        elif rx[i] == "[":
+            j = rx.find("]", i)
+            if j < 0 or not re.fullmatch(r"[a-z]+", rx[i + 1:j]):
+                sys.exit(f"Can't port the class in {pattern!r}.")
+            out += rx[i:j + 1]
+            i = j + 1
+        elif rx[i].isalpha() and rx[i].islower():
+            out += rx[i]
+            i += 1
+        else:
+            sys.exit(f"Can't port {rx[i:]!r} in spelling rule {pattern!r}.")
+    return out
+
+
 def spell_rule(rule):
-    """(regex, out) from LOCKED/JAWLESS -> {from, to[, ahead]}: a literal, then optionally \\b or (?=[class])."""
+    """(regex, out) from LOCKED/JAWLESS -> {from, to[, ahead]}: a literal, then optionally \\b or a lookahead
+    (?=...) of letters, [classes] and a final \\b; ahead is a Lua pattern."""
     pattern, out = rule
-    m = re.fullmatch(r"([a-z]+)(\\b|\(\?=\[([a-z]+)\]\))?", pattern)
+    m = re.fullmatch(r"([a-z]+)(?:(\\b)|\(\?=(.+)\))?", pattern)
     if not m:
         sys.exit(f"Can't port spelling rule {pattern!r}.")
     entry = {"from": m.group(1), "to": out}
-    if m.group(2) == r"\b":
-        entry["ahead"] = "boundary"
+    if m.group(2):
+        entry["ahead"] = "%f[^%w_]"
     elif m.group(3):
-        entry["ahead"] = m.group(3)
+        entry["ahead"] = lua_ahead(m.group(3), pattern)
     return entry
 
 
@@ -222,15 +244,19 @@ def main():
     for key, rule_list in tables.items():
         out.append(lua_list(f"ns.WORDS.{key}", [word_rule(r) for r in rule_list]))
 
-    out.append("\n-- Undead spelling swaps, in order: { from, to, ahead? = \"boundary\" or letters one of which must "
-               "follow }.\n")
+    out.append("\n-- Undead spelling swaps, in order: { from, to, ahead? = a Lua pattern that "
+               "must match right after }.\n")
     out.append(lua_list("ns.LOCKED", [spell_rule(r) for r in rules.LOCKED]))
     out.append(lua_list("ns.JAWLESS", [spell_rule(r) for r in rules.JAWLESS]))
     out.append(f"ns.STRAINS = {lua(rules.STRAINS)}\n")
     out.append(f"ns.GURGLES = {lua(rules.GURGLES)}\n")
     out.append("-- Jawless only: sometimes one of these mid-line, at a comma or between sentences.\n")
     out.append(f"ns.DROOLS = {lua(rules.DROOLS)}\n")
-    out.append(f"ns.DROOL_CHANCE = {lua(rules.DROOL_CHANCE)}\n\n")
+    out.append(f"ns.DROOL_CHANCE = {lua(rules.DROOL_CHANCE)}\n")
+    out.append("-- Locked jaw only: the same mid-line, and how often a word's first sound catches (w-would).\n")
+    out.append(f"ns.CLENCHES = {lua(rules.CLENCHES)}\n")
+    out.append(f"ns.CLENCH_CHANCE = {lua(rules.CLENCH_CHANCE)}\n")
+    out.append(f"ns.STUTTER_CHANCE = {lua(rules.STUTTER_CHANCE)}\n\n")
 
     out.append(f"ns.TAGS = {lua(rules.TAGS)}\n")
     out.append(f"ns.TAG_CHANCE = {lua(rules.TAG_CHANCE)}\n")

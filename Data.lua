@@ -8,11 +8,11 @@ ns.RACE_ACCENT = { Orc = "orc", Troll = "troll", Dwarf = "dwarf", Scourge = "und
 
 -- Accent choices, in the order /acc accent lists them. "race" is not stored: it picks the race's accent.
 ns.ACCENTS = {
-    { key = "orc", label = "Orc" },
-    { key = "troll", label = "Troll" },
-    { key = "dwarf", label = "Dwarf" },
-    { key = "undead", label = "Undead", thick = "jawless" },
-    { key = "none", label = "None" },
+    { key = "orc", label = "Orc", desc = "Short and blunt, with a bit of Orcish." },
+    { key = "troll", label = "Troll", desc = "Da Darkspear way, mon." },
+    { key = "dwarf", label = "Dwarf", desc = "Ye'll be wantin' a pint, lad." },
+    { key = "undead", label = "Undead", desc = "A locked jaw: the vowels come out squeezed.", thick = "jawless" },
+    { key = "none", label = "None", desc = "Lines go out as you type them." },
 }
 
 -- What --thick does to each accent, for /acc accent and the box title.
@@ -29,8 +29,24 @@ ns.BOX_CHANNELS = {
     emote = "EMOTE", w = "WHISPER", whisper = "WHISPER", t = "WHISPER", tell = "WHISPER",
 }
 
-ns.CHANNEL_LABEL = { SAY = "say", YELL = "yell", PARTY = "party", GUILD = "guild", OFFICER = "officer",
-                     RAID = "raid", EMOTE = "emote", WHISPER = "whisper" }
+-- The box's channel list (a click on the channel), in order, with the command that picks it from a line.
+-- need: greyed unless you're in a group, a raid or a guild.
+ns.BOX_MENU = {
+    { chatType = "SAY", label = "Say", cmd = "/s" },
+    { chatType = "YELL", label = "Yell", cmd = "/y" },
+    { chatType = "EMOTE", label = "Emote", cmd = "/e" },
+    { chatType = "PARTY", label = "Party", cmd = "/p", need = "group" },
+    { chatType = "RAID", label = "Raid", cmd = "/r", need = "raid" },
+    { chatType = "GUILD", label = "Guild", cmd = "/g", need = "guild" },
+    { chatType = "OFFICER", label = "Officer", cmd = "/o", need = "guild" },
+    { chatType = "WHISPER", label = "Whisper", cmd = "/w name" },
+}
+
+-- How many people you whispered with (either way) are kept for the box's names, per character.
+ns.RECENT_MAX = 10
+
+-- The options page's Preview button prints this line in your accent.
+ns.SAMPLE = "Thank you, that's a fine blessing. I'll buy you a drink later."
 
 -- How many versions /acc test prints.
 ns.TEST_VERSIONS = 3

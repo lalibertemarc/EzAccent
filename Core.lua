@@ -76,6 +76,44 @@ local function AccentKeys()
     return table.concat(keys, ", ")
 end
 
+---------------------------------------------------------------------------
+-- Other addons' accents (EzAccentAPI). EzMinion, DeadButDelicious and BuffMePlease register at login; setting the
+-- accent or thick here (slash or options) passes it to each, which sets its own to the nearest one it has. Their
+-- own accent commands still set theirs alone, and nothing is passed at login, so those choices stay.
+-- EzAccentDB.share (default on) turns it off.
+---------------------------------------------------------------------------
+local listeners = {}
+
+EzAccentAPI = {
+    -- fn(accent, thick) -> what it set, for the chat line ("EzMinion to jawless"), or nil when it had that already.
+    OnAccentChanged = function(fn) listeners[#listeners + 1] = fn end,
+    GetAccent = function() return Accent(), Thick() end,
+}
+
+local function Share()
+    if not EzAccentDB.share then return end
+    local set = {}
+    for _, fn in ipairs(listeners) do
+        local said = fn(Accent(), Thick())
+        if said then set[#set + 1] = said end
+    end
+    if #set > 0 then Print("Also set " .. table.concat(set, ", ") .. ".") end
+end
+ns.Share = Share
+
+local function SetShare(arg)
+    arg = Trim(arg):lower()
+    if arg == "on" then
+        EzAccentDB.share = true
+    elseif arg == "off" then
+        EzAccentDB.share = false
+    elseif arg ~= "" then
+        return Print("Use /acc share on, or /acc share off.")
+    end
+    Print(EzAccentDB.share and "Changing your accent here also sets it in EzMinion, DeadButDelicious and BuffMePlease."
+        or "Your accent here is yours alone; the other addons keep theirs.")
+end
+
 local function SetAccent(arg)
     arg = Trim(arg):lower()
     if arg == "" then
@@ -89,6 +127,7 @@ local function SetAccent(arg)
         return Print("Unknown accent \"" .. arg .. "\". Choose from: " .. AccentKeys() .. ".")
     end
     Print("Accent: " .. AccentLabel() .. ".")
+    Share()
 end
 
 local function SetThick(arg)
@@ -103,6 +142,7 @@ local function SetThick(arg)
         return Print("Use /acc thick on, or /acc thick off.")
     end
     Print("Thick accent " .. (EzAccentCharDB.thick and "on" or "off") .. ". Accent: " .. AccentLabel() .. ".")
+    Share()
 end
 
 ---------------------------------------------------------------------------
@@ -262,6 +302,7 @@ local HELP = {
     "/acc test <text> - show a few versions in your chat, sends nothing",
     "/acc accent [orc|troll|dwarf|undead|none|race] - this character's accent",
     "/acc thick [on|off] - lay it on thick (dwarf adds Gaelic, undead loses its jaw)",
+    "/acc share [on|off] - changing your accent here also sets EzMinion's, DeadButDelicious' and BuffMePlease's (on by default)",
     "/acc box - the edit box: pick the channel on its left, or start a line with /y, /p, /w name... (also a key binding: Options > Keybindings > EzAccent)",
     "/acc config - the options page (Options > AddOns > EzAccent)",
 }
@@ -276,6 +317,7 @@ local COMMANDS = {
     help = Help,
     accent = SetAccent,
     thick = SetThick,
+    share = SetShare,
     test = Test,
     box = function() ns.OpenBox() end,
     config = OpenSettings,
@@ -300,6 +342,7 @@ ev:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 ev:SetScript("OnEvent", function(_, event, ...)
     if event ~= "PLAYER_LOGIN" then return Remember((select(2, ...))) end  -- text, author
     EzAccentDB = EzAccentDB or {}
+    if EzAccentDB.share == nil then EzAccentDB.share = true end
     EzAccentCharDB = EzAccentCharDB or {}
     if EzAccentCharDB.accent == nil then EzAccentCharDB.accent = RaceAccent() end
     if EzAccentCharDB.thick == nil then EzAccentCharDB.thick = false end

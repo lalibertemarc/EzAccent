@@ -6,6 +6,7 @@ globals = {
     "EzAccentDB",
     "EzAccentCharDB",
     "EzAccent_ToggleBox",
+    "EzAccentAPI",
     "SLASH_EZACCENT1",
     "SLASH_EZACCENT2",
     "SlashCmdList",

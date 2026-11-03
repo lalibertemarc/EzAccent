@@ -27,13 +27,13 @@ function ns.BuildSettings(raceAccent)
         Settings.VarType.Boolean, "Lay it on thick", false)
     thick:SetValueChangedCallback(function() ns.Share() end)
     Settings.CreateCheckbox(category, thick,
-        "Orcs talk like grunts, trolls go full Darkspear, dwarves speak broad Scots with some Gaelic, and undead lose their jaw.")
+        "Orcs talk like grunts, trolls go full Darkspear, dwarves speak broad Scots with some Gaelic, and undead lose their jaw (only another jawless EzAccent user understands them).")
     -- Account-wide, like /acc share.
     local share = Settings.RegisterAddOnSetting(category, "EZACCENT_SHARE", "share", EzAccentDB,
         Settings.VarType.Boolean, "Set my other addons' accents too", true)
     Settings.CreateCheckbox(category, share,
-        "Changing the accent above also sets it in EzMinion, DeadButDelicious and BuffMePlease, to the nearest one each has "
-        .. "(EzMinion and DeadButDelicious only speak undead: any other accent turns theirs off). Their own accent settings still change theirs alone.")
+        "Changing the accent above also sets it in DeadButDelicious and BuffMePlease, to the nearest one each has "
+        .. "(DeadButDelicious only speaks undead: any other accent turns it off). Their own accent settings still change theirs alone.")
     Button("Sample line", "Preview", function() ns.Test(ns.SAMPLE) end,
         "Prints a few versions of a sample line in this accent to your chat. Only you see them.")
 

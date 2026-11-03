@@ -19,8 +19,10 @@ read_globals = {
     "CreateFrame", "UIParent", "DEFAULT_CHAT_FRAME", "ChatFontNormal",
     -- Settings panel
     "Settings", "CreateSettingsListSectionHeaderInitializer", "CreateSettingsButtonInitializer",
+    -- Chat filters (ChatFrameUtil on newer clients)
+    "ChatFrameUtil", "ChatFrame_AddMessageEventFilter",
     -- Namespaced APIs
-    "C_ChatInfo", "issecretvalue",
+    "C_ChatInfo", "C_Timer", "issecretvalue",
     -- Global APIs
     "GetBuildInfo", "UnitRace", "UnitName", "UnitExists", "UnitIsPlayer", "SendChatMessage", "InCombatLockdown",
     "IsInGroup", "IsInRaid", "IsInGuild", "GetNumGroupMembers", "ChatTypeInfo",

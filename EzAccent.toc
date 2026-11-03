@@ -12,4 +12,5 @@ Rules.lua
 Accent.lua
 Settings.lua
 Core.lua
+Translate.lua
 Box.lua

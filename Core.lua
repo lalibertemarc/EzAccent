@@ -53,6 +53,11 @@ local function Thick()
     return EzAccentCharDB and EzAccentCharDB.thick or false
 end
 
+-- Undead with no jaw: only they read each other's meaning (Translate.lua).
+function ns.Jawless()
+    return Accent() == "undead" and Thick()
+end
+
 local function AccentInfo(key)
     for _, a in ipairs(ns.ACCENTS) do
         if a.key == key then return a end
@@ -110,7 +115,7 @@ local function SetShare(arg)
     elseif arg ~= "" then
         return Print("Use /acc share on, or /acc share off.")
     end
-    Print(EzAccentDB.share and "Changing your accent here also sets it in EzMinion, DeadButDelicious and BuffMePlease."
+    Print(EzAccentDB.share and "Changing your accent here also sets it in DeadButDelicious and BuffMePlease."
         or "Your accent here is yours alone; the other addons keep theirs.")
 end
 
@@ -165,6 +170,7 @@ end
 local function NameKey(name)
     return (name:match("^[^%s%-]+") or name):lower()
 end
+ns.NameKey = NameKey
 
 local function GroupUnits()
     local units, n = {}, GetNumGroupMembers() or 0
@@ -250,6 +256,7 @@ local function Say(text, chatType, target)
     else
         said = ns.Speak(accent, text, thick, MAX)
     end
+    ns.SendMeaning(text, chatType, target)
     for _, msg in ipairs(ns.Split(said, MAX)) do
         Send(msg, chatType, target)
     end
@@ -301,8 +308,8 @@ local HELP = {
     "/acc w <name> <text> - whisper it (\"First Surname\", %t, or the first name of your target, someone you whispered with or in your group)",
     "/acc test <text> - show a few versions in your chat, sends nothing",
     "/acc accent [orc|troll|dwarf|undead|none|race] - this character's accent",
-    "/acc thick [on|off] - lay it on thick (dwarf adds Gaelic, undead loses its jaw)",
-    "/acc share [on|off] - changing your accent here also sets EzMinion's, DeadButDelicious' and BuffMePlease's (on by default)",
+    "/acc thick [on|off] - lay it on thick (dwarf adds Gaelic, undead loses its jaw: only other jawless EzAccent users understand you)",
+    "/acc share [on|off] - changing your accent here also sets DeadButDelicious' and BuffMePlease's (on by default)",
     "/acc box - the edit box: pick the channel on its left, or start a line with /y, /p, /w name... (also a key binding: Options > Keybindings > EzAccent)",
     "/acc config - the options page (Options > AddOns > EzAccent)",
 }

@@ -50,3 +50,15 @@ ns.SAMPLE = "Thank you, that's a fine blessing. I'll buy you a drink later."
 
 -- How many versions /acc test prints.
 ns.TEST_VERSIONS = 3
+
+-- Jawless to jawless (Translate.lua): what a jawless line meant goes out as an addon message on the line's channel
+-- (emotes have none: /say reaches as far).
+ns.MEANING_PREFIX = "EzAccent"
+ns.MEANING_CHANNELS = { SAY = "SAY", YELL = "YELL", EMOTE = "SAY", PARTY = "PARTY", RAID = "RAID", GUILD = "GUILD",
+                        OFFICER = "OFFICER", WHISPER = "WHISPER" }
+ns.MEANING_EVENTS = { "CHAT_MSG_SAY", "CHAT_MSG_YELL", "CHAT_MSG_EMOTE", "CHAT_MSG_PARTY", "CHAT_MSG_PARTY_LEADER",
+                      "CHAT_MSG_RAID", "CHAT_MSG_RAID_LEADER", "CHAT_MSG_GUILD", "CHAT_MSG_OFFICER",
+                      "CHAT_MSG_WHISPER" }
+-- Seconds a meaning waits for its line before it shows on a line of its own.
+ns.MEANING_WAIT = 1.5
+ns.MEANING_COLOR = "|cffa0a0a0"

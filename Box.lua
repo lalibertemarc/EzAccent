@@ -205,7 +205,12 @@ local function ToggleChannels()
             items[#items + 1] = {
                 text = m.label .. "...", note = m.cmd, color = color,
                 func = function()
-                    held = Trim(edit:GetText()) ~= "" and edit:GetText() or nil
+                    -- An unfinished command ("/w Na", picked twice) is no line to give back: keep the one held.
+                    local line = edit:GetText()
+                    local cmd = line:match("^/(%S+)")
+                    if not (cmd and ns.BOX_CHANNELS[cmd:lower()]) then
+                        held = Trim(line) ~= "" and line or nil
+                    end
                     edit:SetText("/w ")
                     edit:SetFocus()
                     edit:SetCursorPosition(3)

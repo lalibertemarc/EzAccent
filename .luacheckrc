@@ -26,4 +26,5 @@ read_globals = {
     -- Global APIs
     "GetBuildInfo", "UnitRace", "UnitName", "UnitExists", "UnitIsPlayer", "SendChatMessage", "InCombatLockdown",
     "IsInGroup", "IsInRaid", "IsInGuild", "GetNumGroupMembers", "ChatTypeInfo",
+    "UnitSex", "UnitIsUnit", "UnitInParty", "UnitInRaid", "GetPlayerInfoByGUID",
 }

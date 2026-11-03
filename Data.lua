@@ -45,6 +45,15 @@ ns.BOX_MENU = {
 -- How many people you whispered with (either way) are kept for the box's names, per character.
 ns.RECENT_MAX = 10
 
+-- Words the accents call whoever you talk to, and what a woman hears instead (whole words, swapped after the
+-- accent): the dwarf tag ", lad" and the troll "bruddah" (from friend or brother). Only words the accent put in: a
+-- line you typed with one of typed in it keeps them. A line that already says "lass" (yours, or dwarf "girl") loses
+-- the ", lad" tag instead of saying it twice.
+ns.TO_HER = {
+    { he = "lad", she = "lass", typed = { "lad" } },
+    { he = "bruddah", she = "sistah", typed = { "brother", "bruddah" } },
+}
+
 -- The options page's Preview button prints this line in your accent.
 ns.SAMPLE = "Thank you, that's a fine blessing. I'll buy you a drink later."
 

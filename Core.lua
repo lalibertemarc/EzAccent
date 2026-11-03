@@ -214,9 +214,15 @@ local function ResolveName(name)
 end
 ns.ResolveName = ResolveName
 
+-- UnitSex / GetPlayerInfoByGUID's sex: 2 male, 3 female; nil when unknown or secret.
+local function KnownSex(sex)
+    if issecret(sex) or (sex ~= 2 and sex ~= 3) then return end
+    return sex
+end
+
 -- A whisper's author as the game gives it: "First-Surname" in Forever, made "First Surname" (what whispers take);
--- "Name-Realm" in Era, kept (it whispers fine).
-local function Remember(author)
+-- "Name-Realm" in Era, kept (it whispers fine). Their sex from the GUID is kept with them (EzAccentCharDB.sexes).
+local function Remember(author, guid)
     if not EzAccentCharDB or type(author) ~= "string" or issecret(author) or author == "" then return end
     local name = ns.ERA and author or author:gsub("%-", " ")
     local list = EzAccentCharDB.whispers
@@ -225,6 +231,74 @@ local function Remember(author)
     end
     table.insert(list, 1, name)
     for i = #list, ns.RECENT_MAX + 1, -1 do list[i] = nil end
+
+    if type(EzAccentCharDB.sexes) ~= "table" then EzAccentCharDB.sexes = {} end
+    local sexes, kept = EzAccentCharDB.sexes, {}
+    if type(guid) == "string" and not issecret(guid) and guid ~= "" and GetPlayerInfoByGUID then
+        local sex = KnownSex((select(5, GetPlayerInfoByGUID(guid))))
+        if sex then sexes[NameKey(name)] = sex end
+    end
+    for _, n in ipairs(list) do kept[NameKey(n)] = true end
+    for key in pairs(sexes) do
+        if not kept[key] then sexes[key] = nil end
+    end
+end
+
+---------------------------------------------------------------------------
+-- Whom you speak to: a woman hears the accent's "lad" and "bruddah" as "lass" and "sistah" (ns.TO_HER).
+---------------------------------------------------------------------------
+-- A player unit's sex, never yours.
+local function PlayerSex(unit)
+    if not UnitFullName(unit) or UnitIsUnit(unit, "player") then return end
+    return KnownSex(UnitSex(unit))
+end
+
+-- 3 when you're talking to a woman, 2 a man, nil unknown (your words stay as the accent says them). A whisper's
+-- name is looked up among the units you can see, then the people who whispered you; say, yell and emotes go to your
+-- target, party and raid to your target when it's in your group; guild and officer to nobody in particular.
+local function ListenerSex(chatType, target)
+    if chatType == "WHISPER" then
+        if not target then return end
+        local key = NameKey(target)
+        local units = GroupUnits()
+        table.insert(units, 1, "target")
+        units[#units + 1] = "mouseover"
+        for _, unit in ipairs(units) do
+            local name = UnitFullName(unit)
+            if name and NameKey(name) == key then return PlayerSex(unit) end
+        end
+        return EzAccentCharDB and EzAccentCharDB.sexes and EzAccentCharDB.sexes[key]
+    elseif chatType == "SAY" or chatType == "YELL" or chatType == "EMOTE" then
+        return PlayerSex("target")
+    elseif chatType == "PARTY" or chatType == "RAID" then
+        local inGroup = UnitInParty("target") or UnitInRaid("target")
+        if not issecret(inGroup) and inGroup then return PlayerSex("target") end
+    end
+end
+
+local function Cap(s) return (s:gsub("^%l", string.upper)) end
+
+local function HasWord(s, word)
+    return s:lower():find("%f[%a]" .. word .. "%f[%A]") ~= nil
+end
+
+-- said (text in an accent) as she hears it: only the words the accent put in, never ones you typed.
+local function ToHer(said, text)
+    for _, w in ipairs(ns.TO_HER) do
+        local typed = false
+        for _, t in ipairs(w.typed) do typed = typed or HasWord(text, t) end
+        if not typed then
+            if HasWord(said, w.she) then said = said:gsub(", " .. w.he .. "%f[%A]", "") end
+            said = said:gsub("%f[%a]" .. w.he .. "%f[%A]", w.she):gsub("%f[%a]" .. Cap(w.he) .. "%f[%A]", Cap(w.she))
+        end
+    end
+    return said
+end
+
+-- text in your accent for that listener (ListenerSex).
+local function Speak(accent, text, thick, sex)
+    local said = ns.Speak(accent, text, thick, MAX)
+    return sex == 3 and ToHer(said, text) or said
 end
 
 -- A whisper's name and the text after it: "First Surname" in quotes, or a name as ResolveName takes it (a surname
@@ -248,13 +322,13 @@ local function Say(text, chatType, target)
     if text == "" then return Print("Nothing to say.") end
     if chatType == "WHISPER" and not target then return Print("Whisper whom? /acc w <name> <text>") end
     if ChatLocked() then return Print("The game blocks addon chat right now.") end
-    local accent, thick = Accent(), Thick()
+    local accent, thick, sex = Accent(), Thick(), ListenerSex(chatType, target)
     local said
     if chatType == "EMOTE" and text:find('"[^"]+"') then
         -- /e smiles. "Well met!": only the quoted speech has an accent.
-        said = text:gsub('"([^"]+)"', function(q) return '"' .. ns.Speak(accent, q, thick, MAX) .. '"' end)
+        said = text:gsub('"([^"]+)"', function(q) return '"' .. Speak(accent, q, thick, sex) .. '"' end)
     else
-        said = ns.Speak(accent, text, thick, MAX)
+        said = Speak(accent, text, thick, sex)
     end
     ns.SendMeaning(text, chatType, target)
     for _, msg in ipairs(ns.Split(said, MAX)) do
@@ -279,10 +353,12 @@ local function Test(text)
     if text == "" then return Print("/acc test <text> shows your line in your accent, without sending it.") end
     local accent, thick = Accent(), Thick()
     if accent == "none" then return Print("Your accent is None, so lines go out as you type them.") end
-    Print(AccentLabel() .. ":")
+    local sex = ListenerSex("SAY")
+    Print(AccentLabel() .. (sex == 3 and ", to your target (a woman)" or sex == 2 and ", to your target (a man)" or "")
+        .. ":")
     local seen = {}
     for _ = 1, ns.TEST_VERSIONS * 12 do
-        local v = ns.Speak(accent, text, thick, MAX)
+        local v = Speak(accent, text, thick, sex)
         if not seen[v] and v ~= text then
             seen[v] = true
             seen[#seen + 1] = v
@@ -347,12 +423,13 @@ ev:RegisterEvent("PLAYER_LOGIN")
 ev:RegisterEvent("CHAT_MSG_WHISPER")
 ev:RegisterEvent("CHAT_MSG_WHISPER_INFORM")
 ev:SetScript("OnEvent", function(_, event, ...)
-    if event ~= "PLAYER_LOGIN" then return Remember((select(2, ...))) end  -- text, author
+    if event ~= "PLAYER_LOGIN" then return Remember((select(2, ...)), (select(12, ...))) end  -- author, guid
     EzAccentDB = EzAccentDB or {}
     if EzAccentDB.share == nil then EzAccentDB.share = true end
     EzAccentCharDB = EzAccentCharDB or {}
     if EzAccentCharDB.accent == nil then EzAccentCharDB.accent = RaceAccent() end
     if EzAccentCharDB.thick == nil then EzAccentCharDB.thick = false end
     if type(EzAccentCharDB.whispers) ~= "table" then EzAccentCharDB.whispers = {} end
+    if type(EzAccentCharDB.sexes) ~= "table" then EzAccentCharDB.sexes = {} end
     ns.BuildSettings(RaceAccent())
 end)

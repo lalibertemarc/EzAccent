@@ -39,12 +39,12 @@ The rules are those of AccentTranslator's `rules.py`: word and phrase swaps mine
 python tools/gen_rules.py
 python tools/gen_rules.py --accents undead --out ../EzMinion/AccentRules.lua
 python tools/gen_rules.py --accents undead --out ../DeadButDelicious/AccentRules.lua
-python tools/gen_rules.py --accents undead --out ../EzBlessings/AccentRules.lua
+python tools/gen_rules.py --out ../EzBlessings/AccentRules.lua
 ```
 
-The last three lines write only the undead tables for EzMinion, Dead But Delicious and EzBlessings, which speak their lines in a locked jaw or jawless. Rerun all four after editing `rules.py`.
+The two `--accents undead` lines write only the undead tables for EzMinion and Dead But Delicious, which speak their lines in a locked jaw or jawless; the last writes every accent for EzBlessings. Rerun all four after editing `rules.py`.
 
-The engine that applies them (`Accent.lua`) is a hand port of `rules.accented()`; keep the two in step when the logic changes. EzMinion's, Dead But Delicious's and EzBlessings' `Accent.lua` are trimmed copies of its undead path.
+The engine that applies them (`Accent.lua`) is a hand port of `rules.accented()`; keep the two in step when the logic changes. EzMinion's and Dead But Delicious's `Accent.lua` are trimmed copies of its undead path; EzBlessings' is a whole copy.
 
 ## Install
 

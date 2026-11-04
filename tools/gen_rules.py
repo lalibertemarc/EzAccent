@@ -28,15 +28,16 @@ sys.path.insert(0, str(ROOT.parent / "AccentTranslator"))
 import rules  # noqa: E402
 
 # Lookbehinds rules.py puts in front of a phrase -> the condition name Accent.lua checks.
-AFTER = {r"(?<=[\w}'] )": "word", r"(?<=, )": "comma"}
+AFTER = {r"(?<=[\w}'] )": "word", r"(?<=, )": "comma", rules.START: "start"}
+# Lookaheads after a phrase -> the condition name Accent.lua checks.
+AHEAD = {rules.STOP: "stop", rules.ASKS: "ask", rules.BRACE: "brace"}
 
 # Copied from rules.accented(); each string must still appear in its source.
 INLINE = {
     "TAGGED": r"(?i)\b(?:mon|lad|charaid)\b",
     "MOJO": r"(?i)loa|juju|mojo|spirits|bwonsamdi|voodoo",
     "DRINK": r"(?i:pint|drink|ale)",
-    "DABU": r"(?i)dabu",
-    "OPENED": r"(?i)(?:och|ach|ey|hey|ooh|hrm|bah|throm)",
+    "GREETED": r"(?i:throm-ka)",
 }
 
 
@@ -113,12 +114,20 @@ def word_rule(rule):
             pattern, after = pattern[len(rx):], name
     if pattern.startswith("(?<"):
         sys.exit(f"Unknown lookbehind in {pattern!r}. Add it to AFTER and to Accent.lua.")
+    ahead = None
+    for rx, name in AHEAD.items():
+        if pattern.endswith(rx):
+            pattern, ahead = pattern[:-len(rx)], name
+    if "(?=" in pattern or "(?!" in pattern:
+        sys.exit(f"Unknown lookahead in {pattern!r}. Add it to AHEAD and to Accent.lua.")
     phrases = [s.lower() for s in expand(pattern)]
-    entry = {"phrases": phrases, "out": out}
+    entry = {"phrases": phrases, "keep": True} if out is rules.KEEP else {"phrases": phrases, "out": out}
     if rest and rest[0] != 1:
         entry["chance"] = rest[0]
     if after:
         entry["after"] = after
+    if ahead:
+        entry["ahead"] = ahead
     return entry
 
 
@@ -249,7 +258,11 @@ def all_accents():
            "and rerun.\n",
            "-- Word rules: { phrases = {...}, out = string or {pick one}, chance?, after? = \"word\" (a word and a "
            "space before)\n",
-           "-- or \"comma\" (\", \" before) }. Phrases are lowercase and matched as whole words, first rule wins.\n",
+           "-- or \"comma\" (\", \" before) or \"start\" (neither a word and a space nor a hyphen before), ahead? = "
+           "\"stop\" (, . ! or ?\n",
+           "-- next), \"ask\" (? next) or \"brace\" (\" {\" next), keep? = true (the phrase stays as it is) }. Phrases "
+           "are lowercase\n",
+           "-- and matched as whole words, first rule wins.\n",
            "local _, ns = ...\n\n"]
 
     tables = {
@@ -275,11 +288,12 @@ def all_accents():
                "ignore case.\n")
     detectors = {"THANKS": rules.THANKS, "FIGHT": rules.FIGHT, "GLOOM": rules.GLOOM, "ORCISH": rules.ORCISH,
                  "GAELIC": rules.GAELIC, "TAGGED": INLINE["TAGGED"], "MOJO": INLINE["MOJO"],
-                 "DRINK": INLINE["DRINK"], "DABU": INLINE["DABU"], "OPENED": INLINE["OPENED"]}
+                 "DRINK": INLINE["DRINK"], "GREETED": INLINE["GREETED"], "OPENED": rules.OPENED}
     out.append("ns.TEST = {\n" + "".join(f"    {k} = {lua(detector(v))},\n" for k, v in detectors.items()) + "}\n\n")
 
     out.append(f"ns.ORC_CLOSERS = {lua(rules.ORC_CLOSERS)}\n")
     out.append(f"ns.ORC_CLOSER_CHANCE = {lua(rules.ORC_CLOSER_CHANCE)}\n")
+    out.append(f"ns.ORC_GREETINGS = {lua(rules.ORC_GREETINGS)}\n")
     out.append(f"ns.TROLL_CLOSERS = {lua(rules.TROLL_CLOSERS)}\n")
     out.append(f"ns.TROLL_CLOSER_CHANCE = {lua(rules.TROLL_CLOSER_CHANCE)}\n")
     out.append(f"ns.DWARF_CLOSERS = {lua(rules.DWARF_CLOSERS)}\n")

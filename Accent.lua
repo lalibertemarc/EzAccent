@@ -71,13 +71,28 @@ local function AfterOK(line, i, after)
         return line:sub(i - 1, i - 1) == " " and line:sub(i - 2, i - 2):find("[%w_}']") ~= nil
     elseif after == "comma" then
         return line:sub(i - 2, i - 1) == ", "
+    elseif after == "start" then
+        local prev = line:sub(i - 1, i - 1)
+        return prev ~= "-" and not (prev == " " and line:sub(i - 2, i - 2):find("[%w_}']") ~= nil)
+    end
+    return true
+end
+
+-- The lookaheads gen_rules.py turns into rule.ahead: what must come right after the phrase (which ends at e).
+local function AheadOK(line, e, ahead)
+    if ahead == "stop" then
+        return line:sub(e + 1, e + 1):find("^[,.!?]") ~= nil
+    elseif ahead == "ask" then
+        return line:sub(e + 1, e + 1) == "?"
+    elseif ahead == "brace" then
+        return line:sub(e + 1, e + 2) == " {"
     end
     return true
 end
 
 -- A capital on the original's first letter carries over, except on "I"; a shouted word stays shouted.
 local function CaseLike(src, out)
-    if out == "" or not src:find("^%u") or src == "I" or src:find("^I'") then return out end
+    if out == "" or not src:find("^%u") or src == "I" or src:find("^I'") or src:find("^I%s") then return out end
     if #src > 2 and src:upper() == src then return out:upper() end
     return out:sub(1, 1):upper() .. out:sub(2)
 end
@@ -92,7 +107,8 @@ local function SwapWords(line, rules)
                 if AfterOK(line, i, r.after) then
                     for _, p in ipairs(r.phrases) do
                         local last = i + #p - 1
-                        if low:sub(i, last) == p and not Inside(line:sub(last + 1, last + 1), "}") then
+                        if low:sub(i, last) == p and not Inside(line:sub(last + 1, last + 1), "}")
+                                and AheadOK(line, last, r.ahead) then
                             rule, e = r, last
                             break
                         end
@@ -103,7 +119,7 @@ local function SwapWords(line, rules)
         end
         if rule then
             local src = line:sub(i, e)
-            if random() > (rule.chance or 1) then
+            if rule.keep or random() > (rule.chance or 1) then
                 out[#out + 1] = src
             else
                 out[#out + 1] = CaseLike(src, type(rule.out) == "table" and Pick(rule.out) or rule.out)
@@ -164,11 +180,23 @@ local function Tidy(line)
     line = line:gsub("%s+", " ")
     line = line:gsub("%s+([,.!?;:])", "%1")
     line = line:gsub("^[%s,.;:]+", "")
-    line = Repeat(line, "([.!?])%s*[,.;:]", "%1")  -- also covers rules.py's lone ".." rule
+    line = Repeat(line, "([.!?])%s*[,;:]", "%1")
+    -- "!." and ".!" lose the dot; an ellipsis ("...!", "!..") stays.
+    line = line:gsub("()([!?])%.", function(at, mark)
+        if line:sub(at + 2, at + 2) ~= "." then return mark end
+    end)
+    line = line:gsub("()%.([!?])", function(at, mark)
+        if line:sub(at - 1, at - 1) ~= "." then return mark end
+    end)
     line = Repeat(line, ",%s*,", ",")
     line = line:gsub("[,;:]%s*([.!?])", "%1")
+    line = line:gsub("()%.%.()", function(s, e)  -- ".." -> ".", but not inside "..."
+        if line:sub(s - 1, s - 1) ~= "." and line:sub(e, e) ~= "." then return "." end
+    end)
     line = line:gsub("^(['\"]?)(%l)", Upper)
-    line = line:gsub("([.!?]%s+['\"]?)(%l)", Upper)
+    line = line:gsub("()([.!?]%s+['\"]?)(%l)", function(at, prefix, c)  -- no capital after an ellipsis
+        if line:sub(at - 2, at - 1) ~= ".." then return prefix .. c:upper() end
+    end)
     return Trim(line)
 end
 
@@ -199,8 +227,11 @@ local function OrcRequests(line)
             if s and (not at or s < at) then at, youEnd = s, e end
         end
         if not at then break end
+        -- "Would you mind...?" stays a question.
         local s, e, c1, c2 = low:find("^ please%s+()[^.!?]*()%?", youEnd + 1)
+        if s and low:find("^mind%f[^%w_]", c1) then s = nil end
         if not s then s, e, c1, c2 = low:find("^%s+()[^.!?]*()%?", youEnd + 1) end
+        if s and low:find("^mind%f[^%w_]", c1) then s = nil end
         if s then
             out[#out + 1] = line:sub(pos, at - 1) .. line:sub(c1, c2 - 1) .. "."
             pos = e + 1
@@ -222,6 +253,20 @@ local function Has(line, test)
     end
     for _, s in ipairs(test.subs or {}) do
         if low:find(s, 1, true) then return true end
+    end
+    return false
+end
+
+-- rules.orc_mood: which of ns.ORC_CLOSERS a line gets.
+local function OrcMood(line)
+    local T = ns.TEST
+    return Has(line, T.THANKS) and "thanks" or Has(line, T.FIGHT) and "fight" or Has(line, T.GLOOM) and "gloom"
+        or line:find("%?$") and "ask" or "any"
+end
+
+local function Contains(list, value)
+    for _, v in ipairs(list) do
+        if v == value then return true end
     end
     return false
 end
@@ -340,7 +385,11 @@ local function Parts(accent, line, thick)
 
     if accent == "orc" then
         line = OrcRequests(line)
-        if thick then line = line:gsub(",%s*", ". ") end
+        if thick then  -- short sentences, but "Thanks, {name}!" keeps its comma
+            line = line:gsub(",%s*()", function(at)
+                if line:sub(at, at) ~= "{" then return ". " end
+            end)
+        end
     end
     line = SwapWords(line, Rules(accent, thick))
     if accent == "troll" or accent == "dwarf" then line = DropGs(line) end
@@ -359,9 +408,7 @@ local function Parts(accent, line, thick)
                                          or Has(said, T.GLOOM) and "gloom" or "any"])
     elseif accent == "orc" and not Has(said, T.ORCISH)
             and random() < ns.ORC_CLOSER_CHANCE[thick and "thick" or "light"] then
-        p.closer = Pick(ns.ORC_CLOSERS[Has(said, T.FIGHT) and "fight" or "any"])
-    elseif accent == "orc" and Has(said, T.THANKS) and not Has(said, T.DABU) and random() < 0.3 then
-        p.closer = ns.ORC_CLOSERS.thanks
+        p.closer = Pick(ns.ORC_CLOSERS[OrcMood(said)])
     elseif accent == "dwarf" and thick and not Has(said, T.GAELIC) and random() < ns.DWARF_CLOSER_CHANCE then
         local C = ns.DWARF_CLOSERS
         if random() < 0.4 then
@@ -372,8 +419,18 @@ local function Parts(accent, line, thick)
         end
     end
     local openers = (thick and ns.THICK_OPENERS or ns.OPENERS)[accent]
-    if random() < openers.chance and not StartsWithAny(said, T.OPENED.subs) then
-        p.opener = Pick(openers.list)
+    local list = openers.list
+    if accent == "orc" then
+        -- No greeting on a thanks or a line that already has one, and not "Bah. ... Bah."
+        local text = p.closer and said .. " " .. p.closer or said
+        local greeted = Has(text, T.THANKS) or Has(text, T.GREETED)
+        list = {}
+        for _, o in ipairs(openers.list) do
+            if not (greeted and Contains(ns.ORC_GREETINGS, o)) and o ~= p.closer then list[#list + 1] = o end
+        end
+    end
+    if random() < openers.chance and not StartsWithAny(said, T.OPENED.subs) and #list > 0 then
+        p.opener = Pick(list)
     end
     return p
 end

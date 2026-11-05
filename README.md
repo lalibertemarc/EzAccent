@@ -16,6 +16,7 @@ Type a line and your character says it in their accent. A WoW Forever and Classi
 | `/acc <text>` | Say it in your accent (`/ezaccent` works too) |
 | `/acc y\|p\|g\|o\|r\|e <text>` | Yell, party, guild, officer, raid or emote it (in an emote with "quoted speech", only the quotes get the accent); `/acc s <text>` says a line that starts with a command word |
 | `/acc w <name> <text>` | Whisper it: `"First Surname"`, `%t`, or just the first name of your target, someone you whispered with lately or someone in your group (their surname is filled in) |
+| `/acc more` | Say the next piece of a line too long for one message |
 | `/acc test <text>` | Print a few versions in your own chat, send nothing |
 | `/acc accent [orc\|troll\|dwarf\|undead\|none\|race]` | This character's accent (starts as your race's: orcs, trolls, dwarves and Forsaken have one) |
 | `/acc thick [on\|off]` | Thicker: more Orcish, heavier troll and Scots, Scottish Gaelic for dwarves; undead lose their jaw (see below) |
@@ -29,7 +30,7 @@ Type a line and your character says it in their accent. A WoW Forever and Classi
 
 **Jawless to jawless.** A jawless undead's lines are slush to everyone around, except another jawless undead: EzAccent sends what you meant along with the line, hidden, and anyone with EzAccent set to undead thick reads it after your line, in grey: `Yusht shtay shtill. Ghk. (Just stay still.)`. Without EzAccent, or in any other accent, people only get the slush. It works in say, yell, emotes (the quotes), party, raid, guild, officer and whispers. Your own lines don't get it: you know what you said.
 
-Each line comes out a little different: some words are swapped at random, and a tag (", mon"), an opener ("Och!") or a closer ("Lok'tar!") is added now and then. Chat links, raid marks like `{skull}` and `%t` are left alone. A line longer than the 255-character chat limit loses its extras first, then goes out in pieces.
+Each line comes out a little different: some words are swapped at random, and a tag (", mon"), an opener ("Och!") or a closer ("Lok'tar!") is added now and then. Chat links, raid marks like `{skull}` and `%t` are left alone. A line longer than the 255-character chat limit loses its extras first, then goes out in pieces. In say, yell, emotes and channels the game allows one message per key press, so only the first piece goes at once: the box opens with the rest waiting, Enter says each one (or `/acc more`), Escape drops them.
 
 ## Where the accents come from
 

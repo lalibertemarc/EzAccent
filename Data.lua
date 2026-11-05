@@ -29,6 +29,10 @@ ns.BOX_CHANNELS = {
     emote = "EMOTE", w = "WHISPER", whisper = "WHISPER", t = "WHISPER", tell = "WHISPER",
 }
 
+-- Channels where Forever lets a key press say only one message (a second one in the same press is blocked): a line
+-- cut in pieces sends one piece per press there. Elsewhere every piece goes at once.
+ns.ONE_PER_PRESS = { SAY = true, YELL = true, EMOTE = true, CHANNEL = true }
+
 -- The box's channel list (a click on the channel), in order, with the command that picks it from a line.
 -- need: greyed unless you're in a group, a raid or a guild.
 ns.BOX_MENU = {

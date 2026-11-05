@@ -38,6 +38,56 @@ local function ChatLocked()
     return C_ChatInfo and C_ChatInfo.InChatMessagingLockdown and C_ChatInfo.InChatMessagingLockdown()
 end
 
+-- A line past 255 bytes goes out in pieces, but Forever lets a key press say only one message in a public channel
+-- (ns.ONE_PER_PRESS): a second SendChatMessage in the same press is blocked. So the first piece goes now and the
+-- rest wait here, one per press: Enter in the box (it opens for them) or /acc more. Escape in the box, or a new
+-- line, drops them.
+local waiting  -- { chatType, target, pieces = { ... } }, nil when nothing waits
+
+local function Waiting()
+    return waiting and #waiting.pieces or 0
+end
+ns.Waiting = Waiting
+
+local function DropWaiting(quiet)
+    if waiting and not quiet then Print(("Dropped the rest of your line (%d more)."):format(#waiting.pieces)) end
+    waiting = nil
+end
+ns.DropWaiting = DropWaiting
+
+local function WaitingNote()
+    local n = Waiting()
+    if n == 0 then return end
+    Print(("%d more to say: press Enter in the box (or /acc more) for each, Escape drops %s."):format(n,
+        n == 1 and "it" or "them"))
+end
+
+local function SendPieces(pieces, chatType, target)
+    DropWaiting()
+    if not ns.ONE_PER_PRESS[chatType] then
+        for _, msg in ipairs(pieces) do Send(msg, chatType, target) end
+        return
+    end
+    Send(pieces[1], chatType, target)
+    if #pieces < 2 then return end
+    waiting = { chatType = chatType, target = target, pieces = { select(2, unpack(pieces)) } }
+    WaitingNote()
+    ns.OpenBox()
+end
+
+-- The next waiting piece (a key press or slash only). False when nothing waits.
+local function SendNext()
+    if not waiting then return false end
+    if ChatLocked() then
+        Print("The game blocks addon chat right now.")
+        return true
+    end
+    Send(table.remove(waiting.pieces, 1), waiting.chatType, waiting.target)
+    if #waiting.pieces == 0 then waiting = nil end
+    return true
+end
+ns.SendNext = SendNext
+
 ---------------------------------------------------------------------------
 -- Settings (EzAccentCharDB: accent, thick)
 ---------------------------------------------------------------------------
@@ -331,9 +381,7 @@ local function Say(text, chatType, target)
         said = Speak(accent, text, thick, sex)
     end
     ns.SendMeaning(text, chatType, target)
-    for _, msg in ipairs(ns.Split(said, MAX)) do
-        Send(msg, chatType, target)
-    end
+    SendPieces(ns.Split(said, MAX), chatType, target)
 end
 ns.Say = Say
 
@@ -382,6 +430,7 @@ local HELP = {
     "/acc <text> - say <text> in your accent",
     "/acc y|p|g|o|r|e <text> - yell, party, guild, officer, raid or emote it (/acc s <text> to say a line that starts with a command word)",
     "/acc w <name> <text> - whisper it (\"First Surname\", %t, or the first name of your target, someone you whispered with or in your group)",
+    "/acc more - say the next piece of a line too long for one message (the box's Enter does too)",
     "/acc test <text> - show a few versions in your chat, sends nothing",
     "/acc accent [orc|troll|dwarf|undead|none|race] - this character's accent",
     "/acc thick [on|off] - lay it on thick (dwarf adds Gaelic, undead loses its jaw: only other jawless EzAccent users understand you)",
@@ -402,6 +451,10 @@ local COMMANDS = {
     thick = SetThick,
     share = SetShare,
     test = Test,
+    more = function()
+        if not SendNext() then return Print("Nothing waits to be said.") end
+        WaitingNote()
+    end,
     box = function() ns.OpenBox() end,
     config = OpenSettings,
 }

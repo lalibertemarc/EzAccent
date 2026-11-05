@@ -82,10 +82,6 @@ EzAccent is the voice of a whole set of roleplay addons. Pick your accent once a
 - **Buff Me Please**: asks the right player for the right buff, in your character's personality.
 - **EzBlessings**: the paladin's blessing button, with a line for every blessing you hand out.
 - **Dead But Delicious**: the Forsaken food critic, with a remark about every corpse you Cannibalize (locked jaw or jawless).
-- **EzMinion** *(coming soon)*: the warlock who calls every other class a minion and orders them to hand over their buff, in the same undead jaw.
-- **Curious Stranger** *(coming soon)*: opens a conversation with whoever you target: a question, a lost tourist, a case of mistaken identity.
-- **Bones** *(coming soon)*: tavern dice games with anyone, from deathroll to best of three.
-- **Fortune Teller** *(coming soon)*: card readings for any player who'll roll for them.
 
 **They work hand in hand with it:**
 

@@ -1,5 +1,9 @@
 # EzAccent
 
+## Unreleased
+
+- **Orcs still offer.** "Would you like some pie?" no longer turns into an order ("Like some roast boar."): it's "You want some roast boar?" now, and "would you care for", "prefer" and "rather" stay questions too. Real requests still get the orc treatment ("Would you cast Fortitude on me?" → "Cast Fortitude on me.").
+
 ## v1.0.0
 
 First release. Type a line, and your character says it in their accent.

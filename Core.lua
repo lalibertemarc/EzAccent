@@ -143,6 +143,8 @@ EzAccentAPI = {
     -- fn(accent, thick) -> what it set, for the chat line ("EzMinion to jawless"), or nil when it had that already.
     OnAccentChanged = function(fn) listeners[#listeners + 1] = fn end,
     GetAccent = function() return Accent(), Thick() end,
+    -- Opens the box on a whisper to name ("First Surname"); EzAcquaintances' book uses it.
+    Whisper = function(name) ns.OpenWhisper(name) end,
 }
 
 local function Share()

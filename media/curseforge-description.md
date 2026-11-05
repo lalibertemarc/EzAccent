@@ -99,7 +99,7 @@ Every one of them is free, stands on its own, and needs nothing from the people 
 
 ## Join us on Discord
 
-Come say hi: **[join the EzAddons Discord](DISCORD_INVITE_LINK)**.
+Come say hi: **[join the EzAddons Discord](https://discord.com/invite/bZrAYqbsD8)**.
 
 - Hear about new versions first (pick the addons you care about and get pinged when they update).
 - Suggest a word your accent gets wrong, a line your orc would never say, or a whole new accent.
@@ -107,4 +107,4 @@ Come say hi: **[join the EzAddons Discord](DISCORD_INVITE_LINK)**.
 
 ## Tell us what you think!
 
-Is there a word your accent keeps getting wrong? A phrase your orc would never say? **Drop it in the [Discord](DISCORD_INVITE_LINK), leave a comment, or open an issue on [GitHub](https://github.com/lalibertemarc/EzAccent/issues)** and it might be in the next update.
+Is there a word your accent keeps getting wrong? A phrase your orc would never say? **Drop it in the [Discord](https://discord.com/invite/bZrAYqbsD8), leave a comment, or open an issue on [GitHub](https://github.com/lalibertemarc/EzAccent/issues)** and it might be in the next update.

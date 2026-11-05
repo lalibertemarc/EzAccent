@@ -53,7 +53,6 @@ Bind a key under **Options > Keybindings > EzAccent** (or type `/acc box`). A sm
 - **Chat links, raid marks** like `{skull}` and `%t` come through untouched.
 - **Long lines** lose their extras first, then go out in pieces. In say, yell and emotes the game lets an addon send one message per key press, so the box waits with the rest: press Enter for each (or `/acc more`).
 - **Try before you speak.** `/acc test <text>` prints a few versions in your own chat and sends nothing.
-- **One accent for all your addons.** Changing it here also changes it in Buff Me Please, Curious Stranger, Bones, Fortune Teller, EzBlessings, EzMinion and Dead But Delicious, if you have them. `/acc share off` keeps them apart.
 - It only ever sends something when you press a key or type a command. It never speaks by itself.
 - **WoW Forever and Classic Era**, from one download.
 
@@ -74,6 +73,38 @@ Bind a key under **Options > Keybindings > EzAccent** (or type `/acc box`). A sm
 | `/acc box` | Open the box |
 | `/acc config` | The options (Esc > Options > AddOns > EzAccent) |
 
+## Better with friends: the EzAddons family
+
+EzAccent is the voice of a whole set of roleplay addons. Pick your accent once and every one of them talks the same way: change it in EzAccent and it changes in the others too, to the nearest voice each has (`/acc share off` if you'd rather keep them apart).
+
+**They speak in your accent:**
+
+- **Buff Me Please**: asks the right player for the right buff, in your character's personality.
+- **EzBlessings**: the paladin's blessing button, with a line for every blessing you hand out.
+- **Dead But Delicious**: the Forsaken food critic, with a remark about every corpse you Cannibalize (locked jaw or jawless).
+- **EzMinion** *(coming soon)*: the warlock who calls every other class a minion and orders them to hand over their buff, in the same undead jaw.
+- **Curious Stranger** *(coming soon)*: opens a conversation with whoever you target: a question, a lost tourist, a case of mistaken identity.
+- **Bones** *(coming soon)*: tavern dice games with anyone, from deathroll to best of three.
+- **Fortune Teller** *(coming soon)*: card readings for any player who'll roll for them.
+
+**They work hand in hand with it:**
+
+- **EzOOC**: out-of-character lines in `(( ))`, with the same kind of box. Your accent for the scene, EzOOC for the asides.
+- **EzReflex**: your character answers emotes aimed at it, and cheers, mourns and duels with your group.
+- **EzEmote**: an emote palette and wheels for everything your character does while they talk.
+- **EzAcquaintances** *(coming soon)*: a contact book of the people you've met. Its Whisper button can open the EzAccent box already on a whisper to them.
+- **EzTongues** *(coming soon)*: speak Orcish, Thalassian, Gutterspeak and more, understood only by those who know the tongue.
+
+Every one of them is free, stands on its own, and needs nothing from the people you talk to.
+
+## Join us on Discord
+
+Come say hi: **[join the EzAddons Discord](DISCORD_INVITE_LINK)**.
+
+- Hear about new versions first (pick the addons you care about and get pinged when they update).
+- Suggest a word your accent gets wrong, a line your orc would never say, or a whole new accent.
+- Report bugs, and help test what's coming next.
+
 ## Tell us what you think!
 
-Is there a word your accent keeps getting wrong? A phrase your orc would never say? **Leave a comment or open an issue on [GitHub](https://github.com/lalibertemarc/EzAccent/issues)** and it might be in the next update.
+Is there a word your accent keeps getting wrong? A phrase your orc would never say? **Drop it in the [Discord](DISCORD_INVITE_LINK), leave a comment, or open an issue on [GitHub](https://github.com/lalibertemarc/EzAccent/issues)** and it might be in the next update.

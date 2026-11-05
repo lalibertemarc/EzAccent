@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#43226a"/>
+      <stop offset="0.6" stop-color="#22113c"/>
+      <stop offset="1" stop-color="#110820"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff0b0"/>
+      <stop offset="0.45" stop-color="#e5b94c"/>
+      <stop offset="1" stop-color="#8f5f17"/>
+    </linearGradient>
+    <linearGradient id="bubble" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a2a72"/>
+      <stop offset="1" stop-color="#1f0f33"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#b9e65c" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#b9e65c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffd36b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffd36b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="skin" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#d9f59a"/>
+      <stop offset="0.5" stop-color="#8fc145"/>
+      <stop offset="1" stop-color="#3f7322"/>
+    </radialGradient>
+    <linearGradient id="ivory" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#c9b48a"/>
+      <stop offset="1" stop-color="#fffbea"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#bg)"/>
+
+  <!-- stars -->
+  <g fill="#fff6d0" opacity="0.8">
+    <circle cx="30" cy="40" r="1.6"/><circle cx="372" cy="250" r="1.8"/><circle cx="200" cy="22" r="1.4"/>
+    <circle cx="210" cy="380" r="1.4"/><circle cx="24" cy="250" r="1.8"/><circle cx="378" cy="36" r="1.4"/>
+  </g>
+
+  <!-- soft glow behind the words -->
+  <ellipse cx="200" cy="146" rx="170" ry="110" fill="url(#aura)"/>
+
+  <!-- the speech bubble -->
+  <path d="M110,58 H290 Q344,58 344,112 V178 Q344,232 290,232 H176 L116,290 L134,232 H110 Q56,232 56,178 V112 Q56,58 110,58 Z"
+        fill="url(#bubble)" stroke="#3a2306" stroke-width="13" stroke-linejoin="round"/>
+  <path d="M110,58 H290 Q344,58 344,112 V178 Q344,232 290,232 H176 L116,290 L134,232 H110 Q56,232 56,178 V112 Q56,58 110,58 Z"
+        fill="none" stroke="url(#gold)" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- the line, bent into an accent: a tilde with an accent mark over it -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#3a2306" stroke-width="30">
+      <path d="M108,182 C134,134 166,134 200,160 S266,186 292,138"/>
+      <path d="M186,112 L226,82"/>
+    </g>
+    <g stroke="url(#gold)" stroke-width="20">
+      <path d="M108,182 C134,134 166,134 200,160 S266,186 292,138"/>
+      <path d="M186,112 L226,82"/>
+    </g>
+  </g>
+  <g fill="#b9e65c" filter="url(#glow)">
+    <circle cx="96" cy="100" r="5"/><circle cx="306" cy="198" r="5"/>
+  </g>
+
+  <!-- the speaker -->
+  <ellipse cx="112" cy="398" rx="90" ry="18" fill="url(#pool)"/>
+  <g transform="translate(112,404) scale(1.35)" stroke="#3a2306" stroke-width="2.8" stroke-linejoin="round" fill="url(#gold)">
+    <path d="M-28,0 C-28,-30 -18,-44 0,-44 C18,-44 28,-30 28,0 Z"/>
+    <circle cx="0" cy="-62" r="15"/>
+  </g>
+
+  <!-- whose voice: a tusked jaw -->
+  <circle cx="294" cy="314" r="46" fill="#b9e65c" opacity="0.40" filter="url(#glow)"/>
+  <path d="M262,286 L246,258 L280,276 Z" fill="url(#skin)" stroke="#3a2306" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="294" cy="314" r="44" fill="url(#skin)" stroke="#3a2306" stroke-width="7"/>
+  <circle cx="294" cy="314" r="44" fill="none" stroke="url(#gold)" stroke-width="4"/>
+  <!-- scowl: brows, eyes, grim mouth -->
+  <g fill="none" stroke="#1f3a10" stroke-width="7" stroke-linecap="round">
+    <path d="M268,292 L288,300"/><path d="M320,292 L300,300"/>
+  </g>
+  <g fill="#fff2a8" stroke="#1f3a10" stroke-width="2">
+    <ellipse cx="281" cy="306" rx="6" ry="4"/><ellipse cx="307" cy="306" rx="6" ry="4"/>
+  </g>
+  <path d="M268,332 Q294,320 320,332" fill="none" stroke="#1f3a10" stroke-width="7" stroke-linecap="round"/>
+  <!-- tusks -->
+  <g stroke="#3a2306" stroke-width="4" stroke-linejoin="round" fill="url(#ivory)">
+    <path d="M266,334 C260,326 258,316 262,306 C268,314 274,322 278,330 Z"/>
+    <path d="M322,334 C328,326 330,316 326,306 C320,314 314,322 310,330 Z"/>
+  </g>
+
+  <!-- sparkles -->
+  <g fill="#fff6d0">
+    <path d="M358,72 l4,12 l12,4 l-12,4 l-4,12 l-4,-12 l-12,-4 l12,-4 z"/>
+    <path d="M36,300 l3,9 l9,3 l-9,3 l-3,9 l-3,-9 l-9,-3 l9,-3 z"/>
+    <path d="M196,300 l2.5,7.5 l7.5,2.5 l-7.5,2.5 l-2.5,7.5 l-2.5,-7.5 l-7.5,-2.5 l7.5,-2.5 z"/>
+  </g>
+  <g fill="#b9e65c" filter="url(#glow)">
+    <circle cx="360" cy="370" r="3.5"/><circle cx="34" cy="150" r="3"/><circle cx="228" cy="262" r="2.5"/>
+  </g>
+</svg>

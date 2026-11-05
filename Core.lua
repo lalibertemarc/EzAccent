@@ -132,9 +132,10 @@ local function AccentKeys()
 end
 
 ---------------------------------------------------------------------------
--- Other addons' accents (EzAccentAPI). EzMinion, DeadButDelicious and BuffMePlease register at login; setting the
--- accent or thick here (slash or options) passes it to each, which sets its own to the nearest one it has. Their
--- own accent commands still set theirs alone, and nothing is passed at login, so those choices stay.
+-- Other addons' accents (EzAccentAPI). BuffMePlease, CuriousStranger, Bones, FortuneTeller, EzBlessings, EzMinion
+-- and DeadButDelicious register at login (where they're active); setting the accent or thick here (slash or
+-- options) passes it to each, which sets its own to the nearest one it has. Their own accent commands still set
+-- theirs alone, and nothing is passed at login, so those choices stay.
 -- EzAccentDB.share (default on) turns it off.
 ---------------------------------------------------------------------------
 local listeners = {}
@@ -167,7 +168,8 @@ local function SetShare(arg)
     elseif arg ~= "" then
         return Print("Use /acc share on, or /acc share off.")
     end
-    Print(EzAccentDB.share and "Changing your accent here also sets it in DeadButDelicious and BuffMePlease."
+    Print(EzAccentDB.share and "Changing your accent here also sets it in your other addons that speak in one"
+        .. " (Buff Me Please, Curious Stranger, Bones, Fortune Teller, EzBlessings, EzMinion, Dead But Delicious)."
         or "Your accent here is yours alone; the other addons keep theirs.")
 end
 
@@ -436,7 +438,7 @@ local HELP = {
     "/acc test <text> - show a few versions in your chat, sends nothing",
     "/acc accent [orc|troll|dwarf|undead|none|race] - this character's accent",
     "/acc thick [on|off] - lay it on thick (dwarf adds Gaelic, undead loses its jaw: only other jawless EzAccent users understand you)",
-    "/acc share [on|off] - changing your accent here also sets DeadButDelicious' and BuffMePlease's (on by default)",
+    "/acc share [on|off] - changing your accent here also sets it in your other addons that speak in one (on by default)",
     "/acc box - the edit box: pick the channel on its left, or start a line with /y, /p, /w name... (also a key binding: Options > Keybindings > EzAccent)",
     "/acc config - the options page (Options > AddOns > EzAccent)",
 }

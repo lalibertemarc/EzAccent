@@ -20,7 +20,7 @@ Type a line and your character says it in their accent. A WoW Forever and Classi
 | `/acc test <text>` | Print a few versions in your own chat, send nothing |
 | `/acc accent [orc\|troll\|dwarf\|undead\|none\|race]` | This character's accent (starts as your race's: orcs, trolls, dwarves and Forsaken have one) |
 | `/acc thick [on\|off]` | Thicker: more Orcish, heavier troll and Scots, Scottish Gaelic for dwarves; undead lose their jaw (see below) |
-| `/acc share [on\|off]` | Changing your accent here also sets DeadButDelicious', EzBlessings' and BuffMePlease's (on by default) |
+| `/acc share [on\|off]` | Changing your accent here also sets it in your other addons that speak in one: Buff Me Please, Curious Stranger, Bones, Fortune Teller, EzBlessings, EzMinion and Dead But Delicious (on by default) |
 | `/acc box` | The edit box |
 | `/acc config` | The options page (Options > AddOns > EzAccent): accent, thick, a sample line, the box and its key binding |
 
@@ -41,11 +41,15 @@ python tools/gen_rules.py
 python tools/gen_rules.py --accents undead --out ../EzMinion/AccentRules.lua
 python tools/gen_rules.py --accents undead --out ../DeadButDelicious/AccentRules.lua
 python tools/gen_rules.py --out ../EzBlessings/AccentRules.lua
+python tools/gen_rules.py --out ../BuffMePlease/AccentRules.lua
+python tools/gen_rules.py --out ../CuriousStranger/AccentRules.lua
+python tools/gen_rules.py --out ../Bones/AccentRules.lua
+python tools/gen_rules.py --out ../FortuneTeller/AccentRules.lua
 ```
 
-The two `--accents undead` lines write only the undead tables for EzMinion and Dead But Delicious, which speak their lines in a locked jaw or jawless; the last writes every accent for EzBlessings. Rerun all four after editing `rules.py`.
+The two `--accents undead` lines write only the undead tables for EzMinion and Dead But Delicious, which speak their lines in a locked jaw or jawless; the others write every accent. Rerun them all after editing `rules.py`.
 
-The engine that applies them (`Accent.lua`) is a hand port of `rules.accented()`; keep the two in step when the logic changes. EzMinion's and Dead But Delicious's `Accent.lua` are trimmed copies of its undead path; EzBlessings' is a whole copy.
+The engine that applies them (`Accent.lua`) is a hand port of `rules.accented()`; keep the two in step when the logic changes. EzMinion's and Dead But Delicious's `Accent.lua` are trimmed copies of its undead path; EzBlessings', Buff Me Please's, Curious Stranger's, Bones' and Fortune Teller's are whole copies.
 
 ## Install
 

@@ -32,8 +32,9 @@ function ns.BuildSettings(raceAccent)
     local share = Settings.RegisterAddOnSetting(category, "EZACCENT_SHARE", "share", EzAccentDB,
         Settings.VarType.Boolean, "Set my other addons' accents too", true)
     Settings.CreateCheckbox(category, share,
-        "Changing the accent above also sets it in DeadButDelicious and BuffMePlease, to the nearest one each has "
-        .. "(DeadButDelicious only speaks undead: any other accent turns it off). Their own accent settings still change theirs alone.")
+        "Changing the accent above also sets it in your other addons that speak in one (Buff Me Please, Curious Stranger, "
+        .. "Bones, Fortune Teller, EzBlessings, EzMinion, Dead But Delicious), to the nearest one each has "
+        .. "(EzMinion and Dead But Delicious only speak undead: any other accent turns theirs off). Their own accent settings still change theirs alone.")
     Button("Sample line", "Preview", function() ns.Test(ns.SAMPLE) end,
         "Prints a few versions of a sample line in this accent to your chat. Only you see them.")
 

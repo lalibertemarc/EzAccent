@@ -146,6 +146,11 @@ EzAccentAPI = {
     GetAccent = function() return Accent(), Thick() end,
     -- Opens the box on a whisper to name ("First Surname"); EzAcquaintances' book uses it.
     Whisper = function(name) ns.OpenWhisper(name) end,
+    -- EzLines: the messages for text in this character's accent (for a woman listening: "lass"), none past 255
+    -- bytes; only the "quoted" parts of an emote. Sends nothing.
+    Lines = function(text, chatType, target) return ns.Lines(text, chatType, target) end,
+    -- EzLines, right before the first message goes out: a jawless speaker's plain meaning (Translate.lua).
+    Meaning = function(text, chatType, target) ns.SendMeaning(text, chatType, target) end,
 }
 
 local function Share()
@@ -371,21 +376,28 @@ local function WhisperTarget(rest)
     return full, text
 end
 
+-- text as your character says it on chatType (to target, for a whisper).
+local function Said(text, chatType, target)
+    local accent, thick, sex = Accent(), Thick(), ListenerSex(chatType, target)
+    if chatType == "EMOTE" and text:find('"[^"]+"') then
+        -- /e smiles. "Well met!": only the quoted speech has an accent.
+        return (text:gsub('"([^"]+)"', function(q) return '"' .. Speak(accent, q, thick, sex) .. '"' end))
+    end
+    return Speak(accent, text, thick, sex)
+end
+
+-- The messages to send for text: in your accent, none past 255 bytes. EzAccentAPI.Lines.
+function ns.Lines(text, chatType, target)
+    return ns.Split(Said(text, chatType, target), MAX)
+end
+
 local function Say(text, chatType, target)
     text = Trim(text)
     if text == "" then return Print("Nothing to say.") end
     if chatType == "WHISPER" and not target then return Print("Whisper whom? /acc w <name> <text>") end
     if ChatLocked() then return Print("The game blocks addon chat right now.") end
-    local accent, thick, sex = Accent(), Thick(), ListenerSex(chatType, target)
-    local said
-    if chatType == "EMOTE" and text:find('"[^"]+"') then
-        -- /e smiles. "Well met!": only the quoted speech has an accent.
-        said = text:gsub('"([^"]+)"', function(q) return '"' .. Speak(accent, q, thick, sex) .. '"' end)
-    else
-        said = Speak(accent, text, thick, sex)
-    end
     ns.SendMeaning(text, chatType, target)
-    SendPieces(ns.Split(said, MAX), chatType, target)
+    SendPieces(ns.Lines(text, chatType, target), chatType, target)
 end
 ns.Say = Say
 

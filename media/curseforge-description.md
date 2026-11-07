@@ -89,7 +89,7 @@ EzAccent is the voice of a whole set of roleplay addons. Pick your accent once a
 - **EzReflex**: your character answers emotes aimed at it, and cheers, mourns and duels with your group.
 - **EzEmote**: an emote palette and wheels for everything your character does while they talk.
 - **EzAcquaintances**: a contact book of the people you've met. Its Whisper button can open the EzAccent box already on a whisper to them.
-- **EzTongues** *(coming soon)*: speak Orcish, Thalassian, Gutterspeak and more, understood only by those who know the tongue.
+- **EzTongues**: speak Orcish, Thalassian, Gutterspeak and more, understood only by those who know the tongue.
 
 Every one of them is free, stands on its own, and needs nothing from the people you talk to.
 

@@ -1,8 +1,8 @@
 # EzAccent
 
-## Unreleased
+## v1.0.3
 
-- **Fixed, for real this time:** a key that opens the box, its keybind or an action bar macro running `C:/Program Files/Git/acc box`, no longer types its letter into it.
+- **Fixed:** a key that opens the box, its keybind or an action bar macro running `/acc box`, no longer types its letter into it.
 
 ## v1.0.2
 

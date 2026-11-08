@@ -1,6 +1,6 @@
 # EzAccent
 
-## Unreleased
+## v1.0.2
 
 - **Fixed:** the box's keybind no longer types its own letter into the box when it opens it.
 

@@ -471,7 +471,7 @@ local COMMANDS = {
         if not SendNext() then return Print("Nothing waits to be said.") end
         WaitingNote()
     end,
-    box = function() ns.OpenBox() end,
+    box = function() ns.FocusBox() end,
     config = OpenSettings,
 }
 

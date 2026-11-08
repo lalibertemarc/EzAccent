@@ -1,5 +1,9 @@
 # EzAccent
 
+## Unreleased
+
+- **Fixed, for real this time:** the box's keybind letter no longer lands in the box, whichever key you bind.
+
 ## v1.0.2
 
 - **Fixed:** the box's keybind no longer types its own letter into the box when it opens it.

@@ -18,8 +18,8 @@ Type a line and your character says it in their accent. A WoW Forever and Classi
 | `/acc w <name> <text>` | Whisper it: `"First Surname"`, `%t`, or just the first name of your target, someone you whispered with lately or someone in your group (their surname is filled in) |
 | `/acc more` | Say the next piece of a line too long for one message |
 | `/acc test <text>` | Print a few versions in your own chat, send nothing |
-| `/acc accent [orc\|troll\|dwarf\|undead\|none\|race]` | This character's accent (starts as your race's: orcs, trolls, dwarves and Forsaken have one) |
-| `/acc thick [on\|off]` | Thicker: more Orcish, heavier troll and Scots, Scottish Gaelic for dwarves; undead lose their jaw (see below) |
+| `/acc accent [orc\|troll\|dwarf\|tauren\|undead\|none\|race]` | This character's accent (starts as your race's: orcs, trolls, dwarves, tauren and Forsaken have one) |
+| `/acc thick [on\|off]` | Thicker: more Orcish, heavier troll and Scots, Scottish Gaelic for dwarves, Taur-ahe and days told in suns for tauren; undead lose their jaw (see below) |
 | `/acc share [on\|off]` | Changing your accent here also sets it in your other addons that speak in one: Buff Me Please, Curious Stranger, Bones, Fortune Teller, EzBlessings, EzMinion and Dead But Delicious (on by default) |
 | `/acc box` | The edit box |
 | `/acc config` | The options page (Options > AddOns > EzAccent): accent, thick, a sample line, the box and its key binding |

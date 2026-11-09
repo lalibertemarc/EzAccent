@@ -1,5 +1,10 @@
 # EzAccent
 
+## Unreleased
+
+- **New: a tauren accent.** Calm and unhurried, never broken English: tauren speak in full ("I will", "do not"), count years in winters and months in moons, ride kodos home to Mulgore, and bid farewell with "Walk with the Earth Mother." Now and then a line ends in a blessing that fits it ("The Earth Mother smiles on you." for a thanks, "May the ancestors guide your hand." for a fight). New tauren characters start in it; anyone can pick it with `/acc accent tauren`.
+- **Thick tauren** speak some Taur-ahe ("Nechi owachi" for thanks, "Theia-shoush ahmen" for so be it, "Ish-ne-alo por-ah" for farewell), call the sun An'she and the moon Mu'sha, tell days in suns, and pause to think now and then: "I do not know... I believe we should wait until the next sun."
+
 ## v1.0.3
 
 - **Fixed:** a key that opens the box, its keybind or an action bar macro running `/acc box`, no longer types its letter into it.

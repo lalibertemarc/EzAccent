@@ -4,19 +4,22 @@ local _, ns = ...
 ns.ERA = select(4, GetBuildInfo()) < 16000
 
 -- UnitRace's file name -> the accent a new character starts with (EzAccentCharDB.accent).
-ns.RACE_ACCENT = { Orc = "orc", Troll = "troll", Dwarf = "dwarf", Scourge = "undead", Undead = "undead" }
+ns.RACE_ACCENT = { Orc = "orc", Troll = "troll", Dwarf = "dwarf", Tauren = "tauren", Scourge = "undead",
+                   Undead = "undead" }
 
 -- Accent choices, in the order /acc accent lists them. "race" is not stored: it picks the race's accent.
 ns.ACCENTS = {
     { key = "orc", label = "Orc", desc = "Short and blunt, with a bit of Orcish." },
     { key = "troll", label = "Troll", desc = "Da Darkspear way, mon." },
     { key = "dwarf", label = "Dwarf", desc = "Ye'll be wantin' a pint, lad." },
+    { key = "tauren", label = "Tauren", desc = "Calm and unhurried. Walk with the Earth Mother." },
     { key = "undead", label = "Undead", desc = "A locked jaw: the vowels come out squeezed.", thick = "jawless" },
     { key = "none", label = "None", desc = "Lines go out as you type them." },
 }
 
 -- What --thick does to each accent, for /acc accent and the box title.
-ns.THICK_LABEL = { orc = "thick", troll = "thick", dwarf = "thick, Gaelic", undead = "jawless" }
+ns.THICK_LABEL = { orc = "thick", troll = "thick", dwarf = "thick, Gaelic", tauren = "thick, Taur-ahe",
+                   undead = "jawless" }
 
 -- /acc <letter> <text>: the letters that pick a channel. Lowercase only, so a line starting "E" or "I" is said.
 ns.SHORT_CHANNELS = { s = "SAY", y = "YELL", p = "PARTY", g = "GUILD", o = "OFFICER", r = "RAID", e = "EMOTE",

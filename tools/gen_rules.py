@@ -8,7 +8,7 @@ with the Python ones. Rerun after editing rules.py:
 The last two write only the undead tables (locked jaw, jawless) for EzMinion and Dead But Delicious, which each have
 their own trimmed copy of Accent.lua. Rerun all three after editing rules.py.
 
-What it ports: the word swap tables (TROLL/DWARF/ORC + *_THICK, ORC_VERBS), the undead spelling rules (LOCKED,
+What it ports: the word swap tables (TROLL/DWARF/ORC/TAUREN + *_THICK, ORC_VERBS), the undead spelling rules (LOCKED,
 JAWLESS), their end sounds and the jawless drools, tags, openers, and the regexes that pick closers. Lua 5.1 has no regex, so every
 pattern is expanded into plain phrases ("(?:is|are) going to" -> "is going to", "are going to"); anything this
 script doesn't understand stops it with an error instead of porting it wrong.
@@ -34,7 +34,8 @@ AHEAD = {rules.STOP: "stop", rules.ASKS: "ask", rules.BRACE: "brace"}
 
 # Copied from rules.accented(); each string must still appear in its source.
 INLINE = {
-    "TAGGED": r"(?i)\b(?:mon|lad|charaid)\b",
+    "TAGGED": r"(?i)\b(?:mon|lad|charaid|little one)\b",
+    "FRIEND": r"(?i)\b(?:friend|friends)\b",
     "MOJO": r"(?i)loa|juju|mojo|spirits|bwonsamdi|voodoo",
     "DRINK": r"(?i:pint|drink|ale)",
     "GREETED": r"(?i:throm-ka)",
@@ -269,6 +270,7 @@ def all_accents():
         "troll": rules.TROLL, "troll_thick": rules.TROLL_THICK,
         "dwarf": rules.DWARF, "dwarf_thick": rules.DWARF_THICK,
         "orc": rules.ORC, "orc_thick": rules.ORC_THICK, "orc_pre": rules.ORC_PRE,
+        "tauren": rules.TAUREN, "tauren_thick": rules.TAUREN_THICK,
     }
     out.append("ns.WORDS = {}\n")
     for key, rule_list in tables.items():
@@ -288,7 +290,8 @@ def all_accents():
                "ignore case.\n")
     detectors = {"THANKS": rules.THANKS, "FIGHT": rules.FIGHT, "GLOOM": rules.GLOOM, "ORCISH": rules.ORCISH,
                  "GAELIC": rules.GAELIC, "TAGGED": INLINE["TAGGED"], "MOJO": INLINE["MOJO"],
-                 "DRINK": INLINE["DRINK"], "GREETED": INLINE["GREETED"], "OPENED": rules.OPENED}
+                 "DRINK": INLINE["DRINK"], "GREETED": INLINE["GREETED"], "OPENED": rules.OPENED,
+                 "TAUREN": rules.TAUREN_WORDS, "FRIEND": INLINE["FRIEND"]}
     out.append("ns.TEST = {\n" + "".join(f"    {k} = {lua(detector(v))},\n" for k, v in detectors.items()) + "}\n\n")
 
     out.append(f"ns.ORC_CLOSERS = {lua(rules.ORC_CLOSERS)}\n")
@@ -298,6 +301,10 @@ def all_accents():
     out.append(f"ns.TROLL_CLOSER_CHANCE = {lua(rules.TROLL_CLOSER_CHANCE)}\n")
     out.append(f"ns.DWARF_CLOSERS = {lua(rules.DWARF_CLOSERS)}\n")
     out.append(f"ns.DWARF_CLOSER_CHANCE = {lua(rules.DWARF_CLOSER_CHANCE)}\n")
+    out.append(f"ns.TAUREN_CLOSERS = {lua(rules.TAUREN_CLOSERS)}\n")
+    out.append(f"ns.TAUREN_CLOSER_CHANCE = {lua(rules.TAUREN_CLOSER_CHANCE)}\n")
+    out.append("-- Thick tauren only: how often one comma becomes a pause (...).\n")
+    out.append(f"ns.PAUSE_CHANCE = {lua(rules.PAUSE_CHANCE)}\n")
     return out
 
 

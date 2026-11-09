@@ -11,19 +11,21 @@ You rolled a troll. You picked the hair, the tusks, the slouch. And then you ope
 > **Troll:** Tank ya, dat be a fine blessin'. I buy ya a drink later, mon.
 > **Dwarf:** Thank ye, that's a fine blessin'. I'll buy ye a pint later.
 > **Orc:** Aka'Magosh, that is fine blessing. I buy you drink later.
+> **Tauren:** My thanks, that is a fine blessing. I will buy you a drink later. The Earth Mother smiles on you.
 > **Undead:** Thenk yuu, thet's e fine blessing. I'll buy yuu e drink leter. Nngh.
 
 Nobody else needs the addon. To them, you just have a very consistent accent.
 
-## Four accents, two strengths
+## Five accents, two strengths
 
-Orcs, trolls, dwarves and Forsaken start in their own accent. Anyone else can pick one with `/acc accent` (a human raised in Ironforge? Sure.).
+Orcs, trolls, dwarves, tauren and Forsaken start in their own accent. Anyone else can pick one with `/acc accent` (a human raised in Ironforge? Sure.).
 
 Turn on **thick** (`/acc thick on`) and it gets heavier:
 
 - **Orcs** talk like grunts: "You ready? We must go now. Me hungry."
 - **Trolls** go full Darkspear: "Ya wanna come wit' us ta da dungeon?"
 - **Dwarves** speak broad Scots with some Gaelic: "D'ye want tae come? Mìle taing, that wis awfy kind o' ye."
+- **Tauren** take their time, with some Taur-ahe and the sun and moon by name: "Theia-shoush ahmen... let us go before An'she sets."
 - **Undead** lose their jaw altogether. Lip sounds are gone, every s comes out slushy, and now and then something wet slips out mid-line: "Hhleashe, shlrk, ghe quiet."
 
 Every line comes out a little different. Some words swap at random, and now and then an opener, a tag or a closer that fits the line gets added: *Lok'tar ogar!* for a fight, *Aka'Magosh* for a thanks, *Dabu?* for a question.
@@ -67,7 +69,7 @@ Bind a key under **Options > Keybindings > EzAccent** (or type `/acc box`). A sm
 | `/acc w <name> <text>` | Whisper it (a first name is enough for people the box knows) |
 | `/acc more` | Say the next piece of a long line |
 | `/acc test <text>` | Print a few versions, send nothing |
-| `/acc accent [orc/troll/dwarf/undead/none/race]` | This character's accent |
+| `/acc accent [orc/troll/dwarf/tauren/undead/none/race]` | This character's accent |
 | `/acc thick [on/off]` | Lay it on thick |
 | `/acc share [on/off]` | Set your other addons' accents too |
 | `/acc box` | Open the box |

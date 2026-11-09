@@ -1,0 +1,41 @@
+# Lines every accent is tried on: lua tests/accents.lua (checks + "print" for review) and tools/accent_check.py
+# (the Python and Lua engines must agree on them). One line each; # starts a comment. Add a line whenever an accent
+# gets one wrong, so it stays fixed.
+Thank you, that's a fine blessing. I'll buy you a drink later.
+Hello there! Want to group up for this quest?
+Thanks a lot, I owe you one.
+Thanks, {name}!
+My family thanks you for your help.
+I've been running around for years and I'm still lost.
+Goodbye, friend. See you tomorrow.
+Okay, let's go, the sun is going down.
+Oh my god, did you see that? That was awesome!
+My horse died, so I'm walking back home.
+I'm back home now, and it's good to rest.
+Don't worry, we'll kill the boss quickly.
+I think it's going to rain tonight.
+Hurry up, guys, the raid is waiting!
+Would you cast {buff} on me, please?
+Would you like some pie?
+Lovely day, isn't it?
+You should have told me sooner.
+I'm not going to lie, I'm a bit scared of spiders.
+{name}, I need {buff} before the next fight.
+My {buff} is wearing off and I don't know what I'll do without it.
+Good to see you again. How have you been?
+Hold still, this won't hurt a bit.
+Stay back, or I'll make you regret it.
+Excellent work. The Dark Lady will be pleased.
+Is anyone selling a horse in town?
+Yes, I'll be there in an hour.
+I can't believe you did that, you idiot!
+Wait, are you going to the inn tonight?
+We were fighting for days and nobody came to help.
+The moon is bright and the stars are out.
+Listen, my friend, there's something you should know.
+Could I possibly borrow your cloak?
+I'm told the king is coming to visit.
+Is that a {skull} on your head?
+Hi, %t! Could you cast |cff71d5ff|Hspell:1459|h[Arcane Intellect]|h|r on me?
+Sure, I'll meet you by the bank.
+FOR THE HORDE!

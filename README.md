@@ -51,6 +51,15 @@ The two `--accents undead` lines write only the undead tables for EzMinion and D
 
 The engine that applies them (`Accent.lua`) is a hand port of `rules.accented()`; keep the two in step when the logic changes. EzMinion's and Dead But Delicious's `Accent.lua` are trimmed copies of its undead path; EzBlessings', Buff Me Please's, Curious Stranger's, Bones' and Fortune Teller's are whole copies.
 
+### Checking a change
+
+```
+python tools/accent_check.py --fix       # regenerate all of the above, copy Accent.lua, then check everything
+lua tests/accents.lua print [accent]     # read a few versions of every line in tests/corpus.txt
+```
+
+`accent_check.py` checks that every generated file and copy is current, that the Lua port says every line of `tests/corpus.txt` exactly as `rules.py` does (dice fixed both ways), and runs `lua tests/accents.lua` (also in CI): the corpus said thousands of times in every accent, light and thick, plus regression `CASES`. When an accent says something wrong, add the line to the corpus or a case, so it stays fixed.
+
 ## Install
 
 Copy the `EzAccent` folder into `Interface\AddOns`.

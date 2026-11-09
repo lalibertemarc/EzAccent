@@ -30,7 +30,7 @@ import rules  # noqa: E402
 # Lookbehinds rules.py puts in front of a phrase -> the condition name Accent.lua checks.
 AFTER = {r"(?<=[\w}'] )": "word", r"(?<=, )": "comma", rules.START: "start"}
 # Lookaheads after a phrase -> the condition name Accent.lua checks.
-AHEAD = {rules.STOP: "stop", rules.ASKS: "ask", rules.BRACE: "brace"}
+AHEAD = {rules.STOP: "stop", rules.ASKS: "ask", rules.BRACE: "brace", rules.TO_VERB: "verb"}
 
 # Copied from rules.accented(); each string must still appear in its source.
 INLINE = {
@@ -261,9 +261,9 @@ def all_accents():
            "space before)\n",
            "-- or \"comma\" (\", \" before) or \"start\" (neither a word and a space nor a hyphen before), ahead? = "
            "\"stop\" (, . ! or ?\n",
-           "-- next), \"ask\" (? next) or \"brace\" (\" {\" next), keep? = true (the phrase stays as it is) }. Phrases "
-           "are lowercase\n",
-           "-- and matched as whole words, first rule wins.\n",
+           "-- next), \"ask\" (? next), \"brace\" (\" {\" next) or \"verb\" (no ns.PLACES word or capital next), keep? = "
+           "true (the\n",
+           "-- phrase stays as it is) }. Phrases are lowercase and matched as whole words, first rule wins.\n",
            "local _, ns = ...\n\n"]
 
     tables = {
@@ -272,6 +272,8 @@ def all_accents():
         "orc": rules.ORC, "orc_thick": rules.ORC_THICK, "orc_pre": rules.ORC_PRE,
         "tauren": rules.TAUREN, "tauren_thick": rules.TAUREN_THICK,
     }
+    out.append("-- \"going to\" + one of these (or a capital) is going somewhere, not \"gonna\" (ahead = \"verb\").\n")
+    out.append(f"ns.PLACES = {lua(rules.PLACES)}\n")
     out.append("ns.WORDS = {}\n")
     for key, rule_list in tables.items():
         out.append(lua_list(f"ns.WORDS.{key}", [word_rule(r) for r in rule_list]))

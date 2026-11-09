@@ -1,5 +1,14 @@
 # EzAccent
 
+## Unreleased
+
+- **Fixed: going somewhere isn't "gonna".** "Are you going to the inn?" no longer comes out as "are ya gonna da inn" (troll) or "are ye gonnae the inn" (dwarf), and orcs no longer say "He will the market". Before a place ("the inn", "Orgrimmar") it's "goin' to"; before a verb it's still "gonna kill it".
+- **Fixed:** thick dwarves only say "Tapadh leat" for a thanks of its own ("Thanks, Bob!"), not in "My family thanks you for your help".
+- **Fixed:** tauren ask "Lovely day, is it not?" instead of "is not it?".
+- **Fixed:** shouting stays shouting in undead: "FOR THE HORDE!" is "HHOR HHE HORDE!" (jawless), not "HhOR HhE".
+- Trolls: "I'm told..." is "Dey tell me...", and "I'm not gonna lie" is "I ain't gonna lie" (thick: "Me not gonna lie").
+- Orcs no longer end "Good day. Yes?" with a second "Yes?".
+
 ## v1.1.0-beta.1
 
 - **New: a tauren accent.** Calm and unhurried, never broken English: tauren speak in full ("I will", "do not"), count years in winters and months in moons, ride kodos home to Mulgore, and bid farewell with "Walk with the Earth Mother." Now and then a line ends in a blessing that fits it ("The Earth Mother smiles on you." for a thanks, "May the ancestors guide your hand." for a fight). New tauren characters start in it; anyone can pick it with `/acc accent tauren`.

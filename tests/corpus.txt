@@ -39,3 +39,4 @@ Is that a {skull} on your head?
 Hi, %t! Could you cast |cff71d5ff|Hspell:1459|h[Arcane Intellect]|h|r on me?
 Sure, I'll meet you by the bank.
 FOR THE HORDE!
+He is going to the market, and I'm going to Orgrimmar to buy a wolf.

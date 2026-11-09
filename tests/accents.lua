@@ -59,6 +59,22 @@ local CASES = {
     { "orc", true, "Yes, I'll be there in an hour.", has = { "an hour" } },
     -- A thanks inside a sentence stays a verb; a closing "Aka'Magosh." after it is fine.
     { "orc", nil, "My family thanks you for your help.", has = { "thanks you" }, never = { "Aka'Magosh you" } },
+    { "orc", false, "He is going to the market, I'm going to Orgrimmar.", has = { "goes to", "go to Orgrimmar" },
+      never = { "will the", "will market", "I Orgrimmar" } },
+    -- "going to" + a place is going there, not "gonna"; before a verb it still is.
+    { "troll", nil, "Wait, are you going to the inn tonight?", has = { "goin' t" }, never = { "gonna" } },
+    { "troll", nil, "I'm going to Orgrimmar, he's going to kill it.", has = { "goin' t", "gonna kill" } },
+    { "dwarf", nil, "Wait, are you going to the inn tonight?", has = { " tae the inn" }, never = { "gonnae" } },
+    { "dwarf", nil, "It's going to rain.", has = { "gonnae rain" } },
+    { "dwarf", true, "My family thanks you for your help.", has = { "thanks ye" }, never = { "tapadh", "taing" } },
+    { "dwarf", true, "Thanks, {name}!", never = { "Thanks" } },
+    { "tauren", nil, "Lovely day, isn't it?", has = { "is it not" }, never = { "is not it" } },
+    { "troll", nil, "I'm told the king is coming.", has = { "ey tell me" }, never = { "e told" } },
+    { "troll", true, "I'm not going to lie.", has = { "e not gonna lie" }, never = { "be not" } },
+    { "orc", true, "Lovely day, isn't it?", never = { "Yes? Yes?" } },
+    -- A shouted word stays shouted.
+    { "undead", true, "FOR THE HORDE!", has = { "HHOR HHE HORDE" } },
+    { "undead", false, "FOR THE HORDE!", has = { "FUR " }, never = { "F-f", "T-t", "H-h" } },
 }
 
 ---------------------------------------------------------------------------

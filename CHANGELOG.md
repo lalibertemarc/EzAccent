@@ -4,7 +4,8 @@
 
 - **Fixed: going somewhere isn't "gonna".** "Are you going to the inn?" no longer comes out as "are ya gonna da inn" (troll) or "are ye gonnae the inn" (dwarf), and orcs no longer say "He will the market". Before a place ("the inn", "Orgrimmar") it's "goin' to"; before a verb it's still "gonna kill it".
 - **Fixed:** thick dwarves only say "Tapadh leat" for a thanks of its own ("Thanks, Bob!"), not in "My family thanks you for your help".
-- **Fixed:** tauren ask "Lovely day, is it not?" instead of "is not it?".
+- **Fixed:** tauren ask "Lovely day, is it not?" instead of "is not it?" (also for "ain't it?").
+- **Thick tauren** now use a little rez slang, suggested by one of our testers: "skoden" (let's go then), "stoodis" (let's do this), "enit?" (isn't it?) and "aho" for agreement and thanks: "Aho, skoden, An'she is going down."
 - **Fixed:** shouting stays shouting in undead: "FOR THE HORDE!" is "HHOR HHE HORDE!" (jawless), not "HhOR HhE".
 - Trolls: "I'm told..." is "Dey tell me...", and "I'm not gonna lie" is "I ain't gonna lie" (thick: "Me not gonna lie").
 - Orcs no longer end "Good day. Yes?" with a second "Yes?".

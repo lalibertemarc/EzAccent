@@ -40,3 +40,7 @@ Hi, %t! Could you cast |cff71d5ff|Hspell:1459|h[Arcane Intellect]|h|r on me?
 Sure, I'll meet you by the bank.
 FOR THE HORDE!
 He is going to the market, and I'm going to Orgrimmar to buy a wolf.
+Come on, let's go then!
+Alright, let's do this.
+Let's do it, {name}, the sun is going down.
+Cold out tonight, ain't it?

@@ -9,6 +9,8 @@
 - **Fixed:** shouting stays shouting in undead: "FOR THE HORDE!" is "HHOR HHE HORDE!" (jawless), not "HhOR HhE".
 - Trolls: "I'm told..." is "Dey tell me...", and "I'm not gonna lie" is "I ain't gonna lie" (thick: "Me not gonna lie").
 - Orcs no longer end "Good day. Yes?" with a second "Yes?".
+- Orcs and dwarves answer "ain't it?" as they do "isn't it?" ("Cold out tonight, yes?", "isnae it?"), orcs keep "a bit" ("this will not hurt a bit") and buy "some grog" instead of "a drink".
+- Thick dwarves no longer say "a charaid" twice in one line ("Listen, mo charaid, ... a charaid").
 
 ## v1.1.0-beta.1
 

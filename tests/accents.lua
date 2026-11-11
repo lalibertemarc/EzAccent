@@ -53,6 +53,9 @@ local CASES = {
     { "tauren", true, "Thanks, see you tomorrow!", has = { "until the next sun" } },
     { "tauren", nil, "I'm sure it's fine, don't you think?", never = { "'m ", "'s ", "n't" } },
     -- orc
+    { "orc", nil, "Cold out tonight, ain't it?", has = { "es?" }, never = { "ain't" } },
+    { "orc", false, "Hold still, this won't hurt a bit.", has = { "hurt a bit" } },
+    { "orc", false, "I'll buy you a drink later.", has = { "some grog" } },
     { "orc", nil, "Would you like some pie?", ends = "?", never = { "Like some" } },
     { "orc", nil, "Would you cast {buff} on me, please?", never = { "?", "Would you" } },
     { "orc", true, "You should have told me sooner.", has = { "should have" }, never = { "must have" } },
@@ -66,6 +69,8 @@ local CASES = {
     { "troll", nil, "I'm going to Orgrimmar, he's going to kill it.", has = { "goin' t", "gonna kill" } },
     { "dwarf", nil, "Wait, are you going to the inn tonight?", has = { " tae the inn" }, never = { "gonnae" } },
     { "dwarf", nil, "It's going to rain.", has = { "gonnae rain" } },
+    { "dwarf", nil, "Cold out tonight, ain't it?", has = { "isnae it" } },
+    { "dwarf", true, "Listen, my friend, there's something you should know.", never = { "a charaid" } },
     { "dwarf", true, "My family thanks you for your help.", has = { "thanks ye" }, never = { "tapadh", "taing" } },
     { "dwarf", true, "Thanks, {name}!", never = { "Thanks" } },
     { "tauren", false, "Lovely day, isn't it?", has = { "is it not" }, never = { "is not it" } },

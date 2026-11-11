@@ -1,6 +1,6 @@
 # EzAccent
 
-## Unreleased
+## v1.1.0-beta.2
 
 - **Fixed: going somewhere isn't "gonna".** "Are you going to the inn?" no longer comes out as "are ya gonna da inn" (troll) or "are ye gonnae the inn" (dwarf), and orcs no longer say "He will the market". Before a place ("the inn", "Orgrimmar") it's "goin' to"; before a verb it's still "gonna kill it".
 - **Fixed:** thick dwarves only say "Tapadh leat" for a thanks of its own ("Thanks, Bob!"), not in "My family thanks you for your help".

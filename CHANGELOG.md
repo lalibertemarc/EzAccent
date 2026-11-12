@@ -1,5 +1,9 @@
 # EzAccent
 
+## v1.0.5
+
+- **Fixed:** thick dwarves no longer tack a remark onto a question ("Would ye like some pie? So it is."), say "Tapadh leat!" twice, or add Gaelic to a line that already greets, thanks or says goodbye in Gaelic. Dropped a few openers and closers that clashed with most lines ("Wheesht!", "Haud on!", "Nae bother.", "Mark ma words.").
+
 ## v1.0.4
 
 - **Changed:** thick dwarf no longer opens and closes so many lines the same way: fewer "lad" tags, openers and closers, and a wider choice of them.

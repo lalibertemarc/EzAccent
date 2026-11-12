@@ -1,6 +1,6 @@
 # EzAccent
 
-## Unreleased
+## v1.1.0-beta.3
 
 - **Thick dwarves** have more ways to open and close a line ("Hoots!", "Weel now.", "Dinnae fash.", "For Ironforge!", "Dour times.") and use each one less often, so long chats repeat less.
 - **Fixed:** thick dwarves no longer tack a remark onto a question ("Would ye like some pie? So it is."), nor add Gaelic to a line that already greets, thanks or says goodbye in Gaelic.

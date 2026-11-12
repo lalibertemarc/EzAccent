@@ -1,5 +1,9 @@
 # EzAccent
 
+## Unreleased
+
+- **Undead (locked jaw)** ends its lines more ways: more strained sounds ("Tss.", "Hmmf.", "Grrk.", "Nngh-nngh."...), sometimes tucked in before the last mark ("Ere yuu reedy, mmf?", "I em tired... nngh."), and sometimes none at all, so long chats don't all end the same.
+
 ## v1.1.0-beta.3
 
 - **Thick dwarves** have more ways to open and close a line ("Hoots!", "Weel now.", "Dinnae fash.", "For Ironforge!", "Dour times.") and use each one less often, so long chats repeat less.

@@ -798,9 +798,9 @@ ns.STUTTER_CHANCE = 0.3
 
 ns.TAGS = { troll = { ", mon" }, dwarf = { ", lad" }, orc = {  } }
 ns.TAG_CHANCE = { troll = 0.55, dwarf = 0.45, orc = 0 }
-ns.TAG_CHANCE_THICK = { troll = 0.65, dwarf = 0.6, orc = 0 }
+ns.TAG_CHANCE_THICK = { troll = 0.65, dwarf = 0.35, orc = 0 }
 ns.OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh." }, chance = 0.15 }, dwarf = { list = { "Och!", "Ach!", "Och aye!" }, chance = 0.2 }, orc = { list = { "Hrm.", "Hmph.", "Throm-ka." }, chance = 0.2 } }
-ns.THICK_OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh heh." }, chance = 0.35 }, dwarf = { list = { "Och!", "Ach!", "Crivvens!", "Och aye!" }, chance = 0.3 }, orc = { list = { "Hrm.", "Bah.", "Grah!", "Hrmph.", "Throm-ka!" }, chance = 0.4 } }
+ns.THICK_OPENERS = { troll = { list = { "Ey!", "Ooh!", "Heh heh." }, chance = 0.35 }, dwarf = { list = { "Och!", "Ach!", "Crivvens!", "Och aye!", "Hoots!", "Haud on!", "Weel now.", "Wheesht!" }, chance = 0.2 }, orc = { list = { "Hrm.", "Bah.", "Grah!", "Hrmph.", "Throm-ka!" }, chance = 0.4 }, tauren = { list = { "Hmm.", "Ahh.", "Hmmm." }, chance = 0.35 } }
 
 -- Tests on a line: words = whole words ("fad*" = starting with fad), subs = anywhere; both ignore case.
 ns.TEST = {
@@ -821,5 +821,5 @@ ns.ORC_CLOSER_CHANCE = { light = 0.35, thick = 0.5 }
 ns.ORC_GREETINGS = { "Throm-ka.", "Throm-ka!" }
 ns.TROLL_CLOSERS = { thanks = { "Good juju.", "Da loa bless ya." }, fight = { "Da spirits be wit' us.", "Bwonsamdi be waitin' for dem." }, gloom = { "Bad mojo.", "Da spirits don' like it." }, any = { "Da loa be watchin'.", "Da spirits be tellin' me so.", "Dat be strong juju." } }
 ns.TROLL_CLOSER_CHANCE = 0.3
-ns.DWARF_CLOSERS = { tag = ", a charaid", thanks = { "Slàinte mhath!" }, fight = { "By my beard!", "Seadh!" }, gloom = { "Mo chreach." }, any = { "Seadh.", "So it is." } }
-ns.DWARF_CLOSER_CHANCE = 0.5
+ns.DWARF_CLOSERS = { tag = ", a charaid", thanks = { "Slàinte mhath!", "Tapadh leat!", "A wee dram's yer due." }, fight = { "By my beard!", "Seadh!", "Fer Ironforge!", "Dinnae yield!" }, gloom = { "Mo chreach.", "Dour times.", "It's a sair state." }, any = { "Seadh.", "So it is.", "Nae bother.", "Dinnae fash.", "Mark ma words.", "Aye, so it goes." } }
+ns.DWARF_CLOSER_CHANCE = 0.3

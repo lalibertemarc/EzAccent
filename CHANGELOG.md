@@ -1,5 +1,9 @@
 # EzAccent
 
+## v1.0.4
+
+- **Changed:** thick dwarf no longer opens and closes so many lines the same way: fewer "lad" tags, openers and closers, and a wider choice of them.
+
 ## v1.0.3
 
 - **Fixed:** a key that opens the box, its keybind or an action bar macro running `/acc box`, no longer types its letter into it.

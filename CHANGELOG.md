@@ -1,5 +1,10 @@
 # EzAccent
 
+## Unreleased
+
+- **Thick dwarves** have more ways to open and close a line ("Hoots!", "Weel now.", "Dinnae fash.", "For Ironforge!", "Dour times.") and use each one less often, so long chats repeat less.
+- **Fixed:** thick dwarves no longer tack a remark onto a question ("Would ye like some pie? So it is."), nor add Gaelic to a line that already greets, thanks or says goodbye in Gaelic.
+
 ## v1.1.0-beta.2
 
 - **Fixed: going somewhere isn't "gonna".** "Are you going to the inn?" no longer comes out as "are ya gonna da inn" (troll) or "are ye gonnae the inn" (dwarf), and orcs no longer say "He will the market". Before a place ("the inn", "Orgrimmar") it's "goin' to"; before a verb it's still "gonna kill it".

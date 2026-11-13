@@ -68,7 +68,8 @@ ns.SAMPLE = "Thank you, that's a fine blessing. I'll buy you a drink later."
 ns.TEST_VERSIONS = 3
 
 -- Jawless to jawless (Translate.lua): what a jawless line meant goes out as an addon message on the line's channel
--- (emotes have none: /say reaches as far).
+-- (emotes have none: /say reaches as far). SAY/YELL addon messages don't exist in Forever (and may be refused in Era):
+-- those go to your group and your target instead (Translate.lua SendNearby).
 ns.MEANING_PREFIX = "EzAccent"
 ns.MEANING_CHANNELS = { SAY = "SAY", YELL = "YELL", EMOTE = "SAY", PARTY = "PARTY", RAID = "RAID", GUILD = "GUILD",
                         OFFICER = "OFFICER", WHISPER = "WHISPER" }

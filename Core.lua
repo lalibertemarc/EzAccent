@@ -225,6 +225,7 @@ local function UnitFullName(unit)
     end
     return first
 end
+ns.UnitFullName = UnitFullName
 
 local function NameKey(name)
     return (name:match("^[^%s%-]+") or name):lower()

@@ -34,6 +34,39 @@ local function Plain(text)
     return text
 end
 
+-- SendAddonMessage returns an Enum.SendAddonMessageResult (0 = sent) in Forever, a boolean or nothing in older clients.
+local function Sent(result)
+    return result == nil or result == true or result == 0
+end
+
+local function SendTo(text, channel, target)
+    return Sent(C_ChatInfo.SendAddonMessage(PREFIX, text, channel, target))
+end
+
+-- Your group's addon channel, if you have one.
+local function GroupChannel()
+    if LE_PARTY_CATEGORY_INSTANCE and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then return "INSTANCE_CHAT" end
+    if IsInRaid() then return "RAID" end
+    if IsInGroup() then return "PARTY" end
+end
+
+-- Addon messages have no SAY or YELL in Forever (retail API: Classic only), and Era may refuse them too, so a
+-- /say, /yell or /e meaning goes to whoever is likely listening: your group, and your target when it's a friendly
+-- player outside it (an addon whisper, never seen in chat).
+local function SendNearby(text)
+    local group = GroupChannel()
+    if group then SendTo(text, group) end
+    local name = ns.UnitFullName("target")
+    if not name or UnitIsUnit("target", "player") then return end
+    local coop = UnitCanCooperate("player", "target")
+    if issecret(coop) or not coop then return end
+    if group then
+        local inParty, inRaid = UnitInParty("target"), UnitInRaid("target")
+        if (not issecret(inParty) and inParty) or (not issecret(inRaid) and inRaid) then return end
+    end
+    SendTo(text, "WHISPER", name)
+end
+
 function ns.SendMeaning(text, chatType, target)
     local channel = ns.MEANING_CHANNELS[chatType]
     if not channel or not ns.Jawless() then return end
@@ -44,7 +77,11 @@ function ns.SendMeaning(text, chatType, target)
     end
     text = Plain(text)
     if text == "" then return end
-    C_ChatInfo.SendAddonMessage(PREFIX, text, channel, channel == "WHISPER" and target or nil)
+    if channel == "SAY" or channel == "YELL" then
+        if ns.ERA and SendTo(text, channel) then return end
+        return SendNearby(text)
+    end
+    SendTo(text, channel, channel == "WHISPER" and target or nil)
 end
 
 ---------------------------------------------------------------------------
@@ -65,6 +102,7 @@ local function Heard(prefix, text, _, sender)
         return
     end
     local key = ns.NameKey(sender)
+    if waiting[key] and waiting[key].text == text then return end  -- the same meaning by another way
     local meaning = { from = sender, text = text }
     waiting[key] = meaning
     C_Timer.After(ns.MEANING_WAIT, function()

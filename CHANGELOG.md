@@ -1,6 +1,6 @@
 # EzAccent
 
-## Unreleased
+## v1.1.0-beta.4
 
 - With EzCaret installed, the box tidies your line as you send it: common typos fixed, a capital at the start of sentences and a period at the end, before the accent is put on.
 - **Undead (locked jaw)** ends its lines more ways: more strained sounds ("Tss.", "Hmmf.", "Grrk.", "Nngh-nngh."...), sometimes tucked in before the last mark ("Ere yuu reedy, mmf?", "I em tired... nngh."), and sometimes none at all, so long chats don't all end the same.

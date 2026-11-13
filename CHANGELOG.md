@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **Undead (locked jaw)** ends its lines more ways: more strained sounds ("Tss.", "Hmmf.", "Grrk.", "Nngh-nngh."...), sometimes tucked in before the last mark ("Ere yuu reedy, mmf?", "I em tired... nngh."), and sometimes none at all, so long chats don't all end the same.
+- **Fixed:** the undead hiss no longer lands on a word that already has "ss" ("blesssing").
 
 ## v1.1.0-beta.3
 

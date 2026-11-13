@@ -93,6 +93,8 @@ local CASES = {
     -- A shouted word stays shouted.
     { "undead", true, "FOR THE HORDE!", has = { "HHOR HHE HORDE" } },
     { "undead", false, "FOR THE HORDE!", has = { "FUR " }, never = { "F-f", "T-t", "H-h" } },
+    -- The hiss never lands on a word that already has ss.
+    { "undead", false, "Give me your blessing, I miss you.", never = { "sss" } },
     -- A tucked strain keeps the line's own mark after it: "Ere yuu reedy, mmf?", never "reedy?, mmf" or "?..".
     { "undead", false, "Are you ready?", has = { "reedy" }, never = { "?,", "?.", ",?", ".?" } },
     { "undead", false, "I am tired.", never = { "..,", "....", ". ..." } },

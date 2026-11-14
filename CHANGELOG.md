@@ -1,5 +1,17 @@
 # EzAccent
 
+## v1.1.0
+
+Everything from the 1.1 betas, now for everyone:
+
+- **New: a tauren accent.** Calm and unhurried, never broken English: tauren speak in full ("I will", "do not"), count years in winters and months in moons, ride kodos home to Mulgore, and bid farewell with "Walk with the Earth Mother." New tauren characters start in it; anyone can pick it with `/acc accent tauren`.
+- **Thick tauren** speak some Taur-ahe ("Nechi owachi" for thanks), call the sun An'she and the moon Mu'sha, pause to think now and then, and use a little rez slang ("skoden", "enit?", "aho"). Buff Me Please and EzBlessings don't speak tauren yet: with accent sharing on, picking tauren here sets them to plain.
+- **Thick dwarves** have more ways to open and close a line ("Hoots!", "Dinnae fash.", "For Ironforge!") and repeat them less. They no longer tack a remark onto a question, or add Gaelic to a line that already has some.
+- **Undead with a locked jaw** end their lines more ways ("Tss.", "Hmmf.", "Ere yuu reedy, mmf?"), and sometimes not at all.
+- **Fixed:** jawless undead understand each other again in /say, /yell and emotes. What you meant now reaches your group and your target, if they're a friendly player outside your group.
+- **Fixed:** going somewhere isn't "gonna" ("goin' to the inn"), tauren ask "is it not?", undead shouting stays in capitals, and the undead hiss no longer lands on a word that already has "ss".
+- Listed under **Roleplay** in the game's AddOns list, next to other roleplay addons.
+
 ## v1.1.0-beta.4
 
 - With EzCaret installed, the box tidies your line as you send it: common typos fixed, a capital at the start of sentences and a period at the end, before the accent is put on.

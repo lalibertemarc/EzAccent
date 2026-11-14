@@ -3,6 +3,17 @@
 ## Notes: Type a line and your character says it in their accent: orc, troll, dwarf or undead.
 ## Author: Marc
 ## Version: @project-version@
+## Category: Roleplay
+## Category-deDE: Rollenspiel
+## Category-esES: Juego de rol
+## Category-esMX: Juego de rol
+## Category-frFR: Jeu de rôle
+## Category-itIT: Gioco di Ruolo
+## Category-koKR: 롤플레잉
+## Category-ptBR: Interpretação de Papel
+## Category-ruRU: Ролевая игра
+## Category-zhCN: 角色扮演
+## Category-zhTW: 角色扮演
 ## IconTexture: Interface\Icons\Spell_Holy_Silence
 ## SavedVariables: EzAccentDB
 ## SavedVariablesPerCharacter: EzAccentCharDB
